@@ -68,7 +68,7 @@ export function HeroSection() {
                 <p className="text-xs uppercase tracking-[0.3em] text-primary">Room Summary</p>
                 <div className="mt-3 flex items-end justify-between">
                   <div>
-                    <p className="font-heading text-4xl">36 Rooms</p>
+                    <p className="font-heading text-4xl">50 Rooms</p>
                     <p className="mt-1 text-sm text-accent-foreground/80">
                       Empty, occupied, and maintenance status shown clearly
                     </p>

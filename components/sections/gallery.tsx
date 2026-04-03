@@ -1,11 +1,5 @@
 import Image from "next/image";
-
-const gallery = [
-  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80"
-];
+import { galleryImages } from "@/lib/site-content";
 
 export function GallerySection() {
   return (
@@ -17,7 +11,7 @@ export function GallerySection() {
         </h2>
       </div>
       <div className="grid gap-5 md:grid-cols-2">
-        {gallery.map((image, index) => (
+        {galleryImages.map((image, index) => (
           <div
             key={image}
             className={`relative overflow-hidden rounded-[32px] shadow-soft ${
@@ -26,7 +20,7 @@ export function GallerySection() {
           >
             <Image
               src={image}
-              alt={`Mahapragya Vihar gallery ${index + 1}`}
+              alt={index < 2 ? `Mahapragya Vihar room ${index + 1}` : `Mahapragya Vihar gallery ${index + 1}`}
               fill
               loading="lazy"
               className="object-cover"
