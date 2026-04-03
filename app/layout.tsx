@@ -4,13 +4,14 @@ import "./globals.css";
 
 import { PwaRegister } from "@/components/pwa-register";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
 
   title: {
-    default: `${siteConfig.name} | Luxury Spiritual Stays & Event Booking`,
+    default: `${siteConfig.name} | Rooms, Gallery & Contact`,
     template: `%s | ${siteConfig.name}`
   },
 
@@ -18,11 +19,9 @@ export const metadata: Metadata = {
 
   keywords: [
     "Mahapragya Vihar Bhuwana Udaipur",
-    "Jain Dharamshala Udaipur",
-    "Udaipur wedding hall booking",
-    "Bhuwana event venue",
     "Mahapragya Vihar rooms",
-    "Pravachan hall Udaipur",
+    "Mahapragya Vihar gallery",
+    "Bhuwana Udaipur contact",
     "Jain accommodation Udaipur"
   ],
 
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
   creator: "Gauransh Jaroli",
   publisher: "ParshWebCraft",
 
-  manifest: "/manifest.json",
+  manifest: "/manifest.webmanifest",
 
   icons: {
     icon: "/icon?size=512",
@@ -63,7 +62,7 @@ export const metadata: Metadata = {
     follow: true
   },
 
-  category: "Hotel Booking Platform"
+  category: "Static Hospitality Website"
 };
 
 export default function RootLayout({
@@ -80,6 +79,7 @@ export default function RootLayout({
           <SiteHeader />
           {children}
         </div>
+        <SiteFooter />
 
         {/* SEO Structured Data */}
         <script
@@ -87,17 +87,15 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Hotel",
+              "@type": "LodgingBusiness",
               name: siteConfig.name,
               url: siteConfig.url,
               description: siteConfig.description,
-              creator: {
-                "@type": "Person",
-                name: "Gauransh Jaroli",
-                worksFor: {
-                  "@type": "Organization",
-                  name: "ParshWebCraft"
-                }
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: siteConfig.contact.area,
+                addressRegion: siteConfig.contact.city,
+                addressCountry: siteConfig.contact.country
               }
             })
           }}

@@ -1,13 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-
-const nav = [
-  { href: "/rooms", label: "Rooms" },
-  { href: "/events", label: "Events" },
-  { href: "/book", label: "Book Now" },
-  { href: "/admin", label: "Admin" }
-];
+import { navLinks } from "@/lib/site-content";
 
 export function SiteHeader() {
   return (
@@ -25,7 +19,7 @@ export function SiteHeader() {
           </div>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
-          {nav.map((item) => (
+          {navLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -35,9 +29,11 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <Button variant="secondary" size="sm">
-          Install App
-        </Button>
+        <Link href="/rooms">
+          <Button variant="secondary" size="sm">
+            Explore Rooms
+          </Button>
+        </Link>
       </div>
     </header>
   );

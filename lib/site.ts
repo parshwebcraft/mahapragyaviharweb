@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "Mahapragya Vihar",
 
   description:
-    "Mahapragya Vihar Bhuwana Udaipur offers AC and Non-AC rooms, wedding halls, garden and event spaces for spiritual stays, pravachan programs, weddings and corporate events.",
+    "Mahapragya Vihar Bhuwana Udaipur offers a simple website for rooms, gallery, contact details, support, and manual room availability updates.",
 
   url: "https://mahapragyavihar.vercel.app",
 
@@ -10,11 +10,9 @@ export const siteConfig = {
 
   keywords: [
     "Mahapragya Vihar Udaipur",
-    "Jain Dharamshala Udaipur",
-    "Bhuwana wedding hall",
-    "Udaipur event venue",
     "Mahapragya Vihar rooms",
-    "Pravachan hall Udaipur",
+    "Mahapragya Vihar gallery",
+    "Mahapragya Vihar contact",
     "Jain accommodation Udaipur"
   ],
 
@@ -22,12 +20,13 @@ export const siteConfig = {
 
   publisher: "ParshWebCraft",
 
-  whatsappBookingMessage:
-    "Your Mahapragya Vihar booking is confirmed. We look forward to welcoming you.",
-
   contact: {
     city: "Udaipur",
     area: "Bhuwana",
-    country: "India"
-  }
+    country: "India",
+    phone: "+91 00000 00000",
+    email: "info@mahapragyavihar.com"
+  },
+
+  developer: "ParshWebCraft"
 };

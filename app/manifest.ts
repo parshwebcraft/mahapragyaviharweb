@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Mahapragya Vihar",
     short_name: "Mahapragya",
     description:
-      "Luxury Jain spiritual campus booking app for rooms, halls, weddings, and events.",
+      "Simple website for Mahapragya Vihar rooms, gallery, contact, and support.",
     start_url: "/",
     display: "standalone",
     background_color: "#FFF7E6",
