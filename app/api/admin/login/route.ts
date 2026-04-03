@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 import { adminSessionCookieName, createAdminSessionToken, getAdminCredentials } from "@/lib/admin-auth";
 
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1)
-});
-
 export async function POST(request: Request) {
-  const body = loginSchema.parse(await request.json());
+  const body = (await request.json()) as {
+    email?: string;
+    password?: string;
+  };
+
+  if (!body.email || !body.password || !body.email.includes("@")) {
+    return NextResponse.json({ error: "Invalid admin credentials" }, { status: 400 });
+  }
+
   const credentials = getAdminCredentials();
 
   if (body.email !== credentials.email || body.password !== credentials.password) {
