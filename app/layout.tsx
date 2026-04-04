@@ -11,18 +11,19 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
 
   title: {
-    default: `${siteConfig.name} | Rooms, Gallery & Contact`,
+    default: `${siteConfig.name} Bhuwana Udaipur – Rooms, Wedding Hall & Booking`,
     template: `%s | ${siteConfig.name}`
   },
 
   description: siteConfig.description,
 
   keywords: [
-    "Mahapragya Vihar Bhuwana Udaipur",
-    "Mahapragya Vihar rooms",
-    "Mahapragya Vihar gallery",
-    "Bhuwana Udaipur contact",
-    "Jain accommodation Udaipur"
+    "Mahapragya Vihar Udaipur",
+    "Rooms in Bhuwana Udaipur",
+    "Wedding hall Udaipur",
+    "Jain Dharamshala Udaipur",
+    "Event venue Bhuwana Udaipur",
+    "Pravachan hall Udaipur"
   ],
 
   authors: [
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: `${siteConfig.name} | Luxury Spiritual Stays`,
+    title: `${siteConfig.name} Udaipur`,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
@@ -62,14 +63,14 @@ export const metadata: Metadata = {
     follow: true
   },
 
-  category: "Static Hospitality Website"
+  category: "Hotel Booking & Event Venue"
 };
 
 export default function RootLayout({
   children
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body>
@@ -78,8 +79,8 @@ export default function RootLayout({
         <div className="relative min-h-screen overflow-x-hidden">
           <SiteHeader />
           {children}
+          <SiteFooter />
         </div>
-        <SiteFooter />
 
         {/* SEO Structured Data */}
         <script
@@ -93,9 +94,9 @@ export default function RootLayout({
               description: siteConfig.description,
               address: {
                 "@type": "PostalAddress",
-                addressLocality: siteConfig.contact.area,
-                addressRegion: siteConfig.contact.city,
-                addressCountry: siteConfig.contact.country
+                addressLocality: siteConfig?.contact?.area || "Bhuwana",
+                addressRegion: siteConfig?.contact?.city || "Udaipur",
+                addressCountry: siteConfig?.contact?.country || "India"
               }
             })
           }}
