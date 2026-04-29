@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, PhoneCall, Globe } from "lucide-react";
+import { Sparkles, MessageCircle, Globe } from "lucide-react";
 
 import { footerLinks, contactDetails } from "@/lib/site-content";
 import { siteConfig } from "@/lib/site";
@@ -65,7 +65,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Strong Branding Footer */}
+          {/* Branding Footer */}
           <div className="mt-8 border-t border-accent/10 pt-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
@@ -90,11 +90,13 @@ export function SiteFooter() {
                 </a>
 
                 <a
-                  href="tel:+919521347419"
+                  href="https://wa.me/919521347419?text=Hi%20Gauransh%20Jaroli,%20I%20need%20a%20website."
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium text-accent hover:bg-primary/30"
                 >
-                  <PhoneCall className="h-4 w-4" />
-                  +91 95213 47419
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp Now
                 </a>
               </div>
             </div>

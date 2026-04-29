@@ -5,6 +5,7 @@ import "./globals.css";
 import { PwaRegister } from "@/components/pwa-register";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { FloatingBranding } from "@/components/floating-branding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
   title: {
     default: `${siteConfig.name} Udaipur | Jain Wedding Venue, Rooms & Dharamshala`,
-    template: `%s | ${siteConfig.name}`
+    template: `%s | ${siteConfig.name}`,
   },
 
   description:
@@ -36,14 +37,14 @@ export const metadata: Metadata = {
     "Terapanth Jain venue Udaipur",
     "Jain samaj function hall Rajasthan",
     "Stay for wedding guests Udaipur",
-    "Marriage venue near Udaipur"
+    "Marriage venue near Udaipur",
   ],
 
   authors: [
     {
       name: "Gauransh Jaroli",
-      url: "https://parshwebcraft.in"
-    }
+      url: "https://parshwebcraft.in",
+    },
   ],
 
   creator: "Gauransh Jaroli",
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
 
   icons: {
     icon: "/icon?size=512",
-    apple: "/apple-icon"
+    apple: "/apple-icon",
   },
 
   openGraph: {
@@ -63,14 +64,13 @@ export const metadata: Metadata = {
     url: siteConfig.url,
     siteName: siteConfig.name,
     locale: "en_IN",
-    type: "website"
+    type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.name} Udaipur`,
-    description:
-      "Jain wedding venue, rooms and event space in Udaipur."
+    description: "Jain wedding venue, rooms and event space in Udaipur.",
   },
 
   robots: {
@@ -81,15 +81,15 @@ export const metadata: Metadata = {
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
-      "max-video-preview": -1
-    }
+      "max-video-preview": -1,
+    },
   },
 
-  category: "Wedding Venue, Rooms & Hospitality"
+  category: "Wedding Venue, Rooms & Hospitality",
 };
 
 export default function RootLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
@@ -103,6 +103,9 @@ export default function RootLayout({
           {children}
           <SiteFooter />
         </div>
+
+        {/* Floating Branding */}
+        <FloatingBranding />
 
         {/* SEO Structured Data */}
         <script
@@ -123,32 +126,32 @@ export default function RootLayout({
                 addressLocality: "Udaipur",
                 addressRegion: "Rajasthan",
                 postalCode: "313001",
-                addressCountry: "IN"
+                addressCountry: "IN",
               },
               areaServed: "India",
               amenityFeature: [
                 {
                   "@type": "LocationFeatureSpecification",
                   name: "Wedding Hall",
-                  value: true
+                  value: true,
                 },
                 {
                   "@type": "LocationFeatureSpecification",
                   name: "Guest Rooms",
-                  value: true
+                  value: true,
                 },
                 {
                   "@type": "LocationFeatureSpecification",
                   name: "Jain Community Events",
-                  value: true
+                  value: true,
                 },
                 {
                   "@type": "LocationFeatureSpecification",
                   name: "Pravachan Hall",
-                  value: true
-                }
-              ]
-            })
+                  value: true,
+                },
+              ],
+            }),
           }}
         />
       </body>
