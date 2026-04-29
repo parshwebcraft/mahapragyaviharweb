@@ -11,19 +11,32 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
 
   title: {
-    default: `${siteConfig.name} Bhuwana Udaipur – Rooms, Wedding Hall & Booking`,
+    default: `${siteConfig.name} Udaipur | Jain Wedding Venue, Rooms & Dharamshala`,
     template: `%s | ${siteConfig.name}`
   },
 
-  description: siteConfig.description,
+  description:
+    "Mahapragya Vihar Bhuwana Udaipur offers Jain wedding venue, engagement hall, family rooms, guest stay, pravachan hall and peaceful accommodation for visitors from all over India.",
 
   keywords: [
     "Mahapragya Vihar Udaipur",
-    "Rooms in Bhuwana Udaipur",
-    "Wedding hall Udaipur",
-    "Jain Dharamshala Udaipur",
-    "Event venue Bhuwana Udaipur",
-    "Pravachan hall Udaipur"
+    "Mahapragya Vihar Bhuwana",
+    "Jain wedding venue Udaipur",
+    "Jain marriage hall Rajasthan",
+    "Jain wedding destination India",
+    "Jain community wedding hall",
+    "Jain dharamshala Udaipur",
+    "Rooms in Udaipur for wedding guests",
+    "Wedding hall Bhuwana Udaipur",
+    "Engagement hall Udaipur",
+    "Pravachan hall Udaipur",
+    "Group stay Udaipur",
+    "Family stay Udaipur",
+    "Best Jain venue in Udaipur",
+    "Terapanth Jain venue Udaipur",
+    "Jain samaj function hall Rajasthan",
+    "Stay for wedding guests Udaipur",
+    "Marriage venue near Udaipur"
   ],
 
   authors: [
@@ -44,8 +57,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: `${siteConfig.name} Udaipur`,
-    description: siteConfig.description,
+    title: `${siteConfig.name} | Jain Wedding Venue & Rooms in Udaipur`,
+    description:
+      "Premium Jain wedding venue, guest rooms, pravachan hall and peaceful stay in Bhuwana, Udaipur.",
     url: siteConfig.url,
     siteName: siteConfig.name,
     locale: "en_IN",
@@ -54,16 +68,24 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description
+    title: `${siteConfig.name} Udaipur`,
+    description:
+      "Jain wedding venue, rooms and event space in Udaipur."
   },
 
   robots: {
     index: true,
-    follow: true
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
   },
 
-  category: "Hotel Booking & Event Venue"
+  category: "Wedding Venue, Rooms & Hospitality"
 };
 
 export default function RootLayout({
@@ -91,13 +113,41 @@ export default function RootLayout({
               "@type": "LodgingBusiness",
               name: siteConfig.name,
               url: siteConfig.url,
-              description: siteConfig.description,
+              description:
+                "Jain wedding venue, rooms, family stay and spiritual accommodation in Udaipur.",
+              telephone: siteConfig?.contact?.phone,
+              email: siteConfig?.contact?.email,
               address: {
                 "@type": "PostalAddress",
-                addressLocality: siteConfig?.contact?.area || "Bhuwana",
-                addressRegion: siteConfig?.contact?.city || "Udaipur",
-                addressCountry: siteConfig?.contact?.country || "India"
-              }
+                streetAddress: "Bhuwana",
+                addressLocality: "Udaipur",
+                addressRegion: "Rajasthan",
+                postalCode: "313001",
+                addressCountry: "IN"
+              },
+              areaServed: "India",
+              amenityFeature: [
+                {
+                  "@type": "LocationFeatureSpecification",
+                  name: "Wedding Hall",
+                  value: true
+                },
+                {
+                  "@type": "LocationFeatureSpecification",
+                  name: "Guest Rooms",
+                  value: true
+                },
+                {
+                  "@type": "LocationFeatureSpecification",
+                  name: "Jain Community Events",
+                  value: true
+                },
+                {
+                  "@type": "LocationFeatureSpecification",
+                  name: "Pravachan Hall",
+                  value: true
+                }
+              ]
             })
           }}
         />
