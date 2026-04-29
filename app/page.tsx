@@ -5,7 +5,7 @@ import { HeroSection } from "@/components/sections/hero";
 import { GallerySection } from "@/components/sections/gallery";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RoomInventoryPanel } from "@/components/room-inventory-panel";
+import RoomInventoryPanel from "@/components/room-inventory-panel";
 import { contactDetails, siteHighlights } from "@/lib/site-content";
 
 const systemFeatures = [
@@ -86,7 +86,7 @@ export default function HomePage() {
           <p className="text-sm uppercase tracking-[0.3em] text-accent/70">Room availability</p>
           <h2 className="mt-3 font-heading text-4xl text-accent">Current room status summary.</h2>
         </div>
-        <RoomInventoryPanel previewLimit={6} />
+        <RoomInventoryPanel />
       </section>
 
       <section className="section-shell py-16">
