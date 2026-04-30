@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  BedDouble,
-  Sparkles,
-  Home,
-  Images,
-  PhoneCall
-} from "lucide-react";
+import { BedDouble, Sparkles, Home, Images, PhoneCall } from "lucide-react";
 
 import { HeroSection } from "@/components/sections/hero";
 import { GallerySection } from "@/components/sections/gallery";
@@ -17,28 +11,28 @@ const highlights = [
   {
     icon: BedDouble,
     title: "50 Comfortable Rooms",
-    copy: "AC and Non-AC rooms available for families, guests and group stays."
+    copy: "AC and Non-AC rooms available for families, guests and group stays.",
   },
   {
     icon: Sparkles,
     title: "Peaceful Stay",
-    copy: "Clean surroundings with a calm and spiritual atmosphere."
+    copy: "Clean surroundings with a calm and spiritual atmosphere.",
   },
   {
     icon: Images,
     title: "Wedding & Events",
-    copy: "Suitable venue for weddings, engagements, pravachan and gatherings."
+    copy: "Suitable venue for weddings, engagements, pravachan and gatherings.",
   },
   {
     icon: Home,
     title: "Prime Bhuwana Location",
-    copy: "Convenient location in Udaipur with easy access for visitors."
+    copy: "Convenient location in Udaipur with easy access for visitors.",
   },
   {
     icon: PhoneCall,
     title: "Direct Assistance",
-    copy: "Contact our team for room booking, events and stay support."
-  }
+    copy: "Contact our team for room booking, events and stay support.",
+  },
 ];
 
 export default function HomePage() {

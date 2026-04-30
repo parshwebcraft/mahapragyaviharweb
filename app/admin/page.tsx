@@ -4,8 +4,9 @@ import RoomInventoryPanel from "@/components/room-inventory-panel";
 import { AdminLogoutButton } from "@/components/admin-logout-button";
 import {
   adminSessionCookieName,
-  verifyAdminSessionToken
+  verifyAdminSessionToken,
 } from "@/lib/admin-auth";
+import { LeadsPanel } from "@/components/leads-panel";
 
 export default function AdminPage() {
   const session = cookies().get(adminSessionCookieName())?.value;
@@ -69,6 +70,7 @@ export default function AdminPage() {
 
       {/* Panel */}
       <RoomInventoryPanel />
+      <LeadsPanel />
     </main>
   );
 }

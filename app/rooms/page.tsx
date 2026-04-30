@@ -18,9 +18,8 @@ export default function RoomsPage() {
         </h1>
 
         <p className="mt-6 text-lg leading-8 text-muted-foreground">
-          Mahapragya Vihar offers 36 AC Rooms and 14 Non-AC Rooms for
-          families, wedding guests, spiritual stays and group visits in
-          Bhuwana, Udaipur.
+          Mahapragya Vihar offers 36 AC Rooms and 14 Non-AC Rooms for families,
+          wedding guests, spiritual stays and group visits in Bhuwana, Udaipur.
         </p>
       </div>
 
@@ -75,9 +74,7 @@ export default function RoomsPage() {
         </div>
 
         <div className="rounded-3xl border p-6 bg-white/70">
-          <h2 className="text-2xl font-heading text-accent">
-            14 Non-AC Rooms
-          </h2>
+          <h2 className="text-2xl font-heading text-accent">14 Non-AC Rooms</h2>
           <p className="mt-2 text-muted-foreground">
             Budget-friendly peaceful stay rooms.
           </p>
