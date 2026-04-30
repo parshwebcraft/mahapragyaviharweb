@@ -4,13 +4,18 @@ import {
   Building2,
   Music,
   Users,
-  PhoneCall
+  PhoneCall,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function EventsPage() {
+  const WHATSAPP = "919829074922";
+
+  const wa = (msg: string) =>
+    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+
   return (
     <main className="section-shell py-16">
       {/* Header */}
@@ -20,17 +25,31 @@ export default function EventsPage() {
         </p>
 
         <h1 className="mt-3 font-heading text-5xl leading-tight text-accent md:text-6xl">
-          Wedding, Functions & Special Events in Udaipur
+          Jain Wedding & Event Venue in Udaipur
         </h1>
 
         <p className="mt-6 text-lg leading-8 text-muted-foreground">
-          Mahapragya Vihar offers a peaceful and spacious venue in Bhuwana,
-          Udaipur for weddings, engagements, family functions, spiritual
-          gatherings and community programs.
+          Mahapragya Vihar offers a peaceful, spacious and well-managed venue
+          for weddings, engagements, family functions and community events in
+          Bhuwana, Udaipur.
         </p>
+
+        {/* TOP CTA */}
+        <div className="mt-6">
+          <a
+            href={wa(
+              "Hello, I want to inquire about wedding booking at Mahapragya Vihar Udaipur.",
+            )}
+            target="_blank"
+          >
+            <Button className="bg-green-600 hover:bg-green-700 text-white">
+              WhatsApp Wedding Inquiry
+            </Button>
+          </a>
+        </div>
       </div>
 
-      {/* Event Cards */}
+      {/* Event Types */}
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card className="rounded-3xl p-6">
           <HeartHandshake className="h-8 w-8 text-accent" />
@@ -38,7 +57,7 @@ export default function EventsPage() {
             Wedding Events
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Ideal venue for marriage functions and guest stay.
+            Perfect venue for Jain weddings with guest accommodation.
           </p>
         </Card>
 
@@ -48,7 +67,7 @@ export default function EventsPage() {
             Engagements
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Elegant space for ring ceremony and family gatherings.
+            Ideal for ring ceremony and close family celebrations.
           </p>
         </Card>
 
@@ -58,7 +77,7 @@ export default function EventsPage() {
             Social Functions
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Birthday, celebrations and cultural programs.
+            Cultural programs, birthday and private celebrations.
           </p>
         </Card>
 
@@ -68,26 +87,77 @@ export default function EventsPage() {
             Community Events
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Meetings, pravachan and samaj events.
+            Pravachan, samaj meetings and spiritual gatherings.
           </p>
         </Card>
       </div>
 
-      {/* CTA */}
+      {/* WHY CHOOSE */}
+      <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <Card className="p-6 rounded-3xl">
+          <h3 className="text-xl font-heading text-accent">
+            Peaceful Jain Environment
+          </h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Clean, calm and spiritually aligned venue for family functions.
+          </p>
+        </Card>
+
+        <Card className="p-6 rounded-3xl">
+          <h3 className="text-xl font-heading text-accent">Rooms for Guests</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            50 rooms available for wedding guests and group stays.
+          </p>
+        </Card>
+
+        <Card className="p-6 rounded-3xl">
+          <h3 className="text-xl font-heading text-accent">
+            Easy Management Support
+          </h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Direct coordination with management for smooth event execution.
+          </p>
+        </Card>
+      </div>
+
+      {/* MID CTA */}
+      <div className="mt-12 text-center">
+        <a
+          href={wa(
+            "Hello, I want details for wedding/event booking at Mahapragya Vihar Udaipur.",
+          )}
+          target="_blank"
+        >
+          <Button className="bg-green-600 hover:bg-green-700 text-white">
+            Check Availability on WhatsApp
+          </Button>
+        </a>
+      </div>
+
+      {/* FINAL CTA */}
       <div className="mt-14 rounded-3xl border bg-white/80 p-8">
         <h2 className="text-3xl font-heading text-accent">
-          Need Event Booking Assistance?
+          Plan Your Event with Us
         </h2>
 
         <p className="mt-3 text-muted-foreground">
-          For wedding booking, hall availability, guest stay or event inquiry,
-          contact our management team directly.
+          Get pricing, availability and booking details directly from our team.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-4">
-          <Link href="/contact">
-            <Button size="lg">Contact Team</Button>
-          </Link>
+          <a
+            href={wa(
+              "Hello, I want to book an event at Mahapragya Vihar Udaipur.",
+            )}
+            target="_blank"
+          >
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              size="lg"
+            >
+              WhatsApp Now
+            </Button>
+          </a>
 
           <a href="tel:+917733992007">
             <Button variant="secondary" size="lg">

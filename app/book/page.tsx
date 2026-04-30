@@ -10,6 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function BookPage() {
+  const WHATSAPP = "919829074922";
+
+  const openWhatsApp = (message: string) => {
+    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+  };
+
   return (
     <main className="section-shell py-16">
       {/* Header */}
@@ -19,13 +25,12 @@ export default function BookPage() {
         </p>
 
         <h1 className="mt-3 font-heading text-5xl leading-tight text-accent md:text-6xl">
-          Room & Event Booking Assistance
+          Book Rooms & Wedding Venue in Udaipur
         </h1>
 
         <p className="mt-6 text-lg leading-8 text-muted-foreground">
-          Online instant booking will be available soon. For now, room booking,
-          wedding functions, guest stay and event reservations are handled
-          directly by our management team.
+          For room booking, wedding events and group stays, connect directly
+          with our team for quick confirmation and best pricing.
         </p>
       </div>
 
@@ -39,8 +44,17 @@ export default function BookPage() {
           </h2>
 
           <p className="mt-2 text-sm text-muted-foreground">
-            AC and Non-AC rooms for families, guests and peaceful stay.
+            AC and Non-AC rooms for families, wedding guests and group stay.
           </p>
+
+          <a
+            href={openWhatsApp("Hello, I want to book rooms at Mahapragya Vihar Udaipur.")}
+            target="_blank"
+          >
+            <Button className="mt-5 w-full bg-green-600 hover:bg-green-700 text-white">
+              Book on WhatsApp
+            </Button>
+          </a>
         </Card>
 
         <Card className="rounded-3xl p-6 text-center">
@@ -51,43 +65,65 @@ export default function BookPage() {
           </h2>
 
           <p className="mt-2 text-sm text-muted-foreground">
-            Venue booking for marriage, engagement and celebrations.
+            Jain wedding venue, engagement and celebration functions.
           </p>
+
+          <a
+            href={openWhatsApp("Hello, I want to inquire about wedding booking at Mahapragya Vihar Udaipur.")}
+            target="_blank"
+          >
+            <Button className="mt-5 w-full bg-green-600 hover:bg-green-700 text-white">
+              Wedding Inquiry
+            </Button>
+          </a>
         </Card>
 
         <Card className="rounded-3xl p-6 text-center">
           <CalendarDays className="mx-auto h-10 w-10 text-accent" />
 
           <h2 className="mt-4 text-2xl font-heading text-accent">
-            Event Reservation
+            Event Booking
           </h2>
 
           <p className="mt-2 text-sm text-muted-foreground">
-            Social, spiritual and community functions booking support.
+            Social, spiritual and community event reservations.
           </p>
+
+          <a
+            href={openWhatsApp("Hello, I want to book an event at Mahapragya Vihar Udaipur.")}
+            target="_blank"
+          >
+            <Button className="mt-5 w-full bg-green-600 hover:bg-green-700 text-white">
+              Book Event
+            </Button>
+          </a>
         </Card>
       </div>
 
       {/* CTA */}
       <div className="mx-auto mt-14 max-w-3xl rounded-3xl border bg-white/80 p-8 text-center">
         <h2 className="text-3xl font-heading text-accent">
-          Need Immediate Booking Help?
+          Need Help? Talk Directly
         </h2>
 
         <p className="mt-3 text-muted-foreground">
-          Contact our reception or management team for availability, pricing and
-          booking confirmation.
+          Get instant response on WhatsApp or call our reception team.
         </p>
 
         <div className="mt-6 flex flex-wrap justify-center gap-4">
-          <Link href="/rooms">
-            <Button size="lg">View Rooms</Button>
-          </Link>
+          <a
+            href={openWhatsApp("Hello, I want booking details for Mahapragya Vihar Udaipur.")}
+            target="_blank"
+          >
+            <Button className="bg-green-600 hover:bg-green-700 text-white" size="lg">
+              WhatsApp Now
+            </Button>
+          </a>
 
           <a href="tel:+917733992007">
             <Button variant="secondary" size="lg">
               <PhoneCall className="mr-2 h-4 w-4" />
-              Call Now
+              Call Reception
             </Button>
           </a>
         </div>
