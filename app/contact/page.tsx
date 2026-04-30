@@ -46,11 +46,11 @@ export default function ContactPage() {
 Check-in: ${checkIn}
 Check-out: ${checkOut}`;
 
-    const url = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/919829074922?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
 
-  const WATSAPP_NUMBER = "919876543210";
+  const WATSAPP_NUMBER = "919829074922";
 
   async function handleWedding() {
     await fetch("/api/leads", {
@@ -141,12 +141,12 @@ Check-out: ${checkOut}`;
                 {
                   role: "Adhyaksh (President)",
                   name: "Kamal Ji Nahata",
-                  phone: "919876543210",
+                  phone: "917733992007",
                 },
                 {
                   role: "Mahamantri",
                   name: "Abhishek Ji Pokharna",
-                  phone: "919812345678",
+                  phone: "919829074922",
                 },
                 {
                   role: "IT Team Lead",
