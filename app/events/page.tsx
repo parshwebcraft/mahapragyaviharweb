@@ -29,9 +29,9 @@ export default function EventsPage() {
         </h1>
 
         <p className="mt-6 text-lg leading-8 text-muted-foreground">
-          Mahapragya Vihar offers a peaceful, spacious and well-managed venue
-          for weddings, engagements, family functions and community events in
-          Bhuwana, Udaipur.
+          Mahapragya Vihar offers a peaceful and spacious Jain wedding venue in
+          Bhuwana, Udaipur with 50 fully air-conditioned rooms for guest stay,
+          making it ideal for complete wedding arrangements.
         </p>
 
         {/* TOP CTA */}
@@ -91,6 +91,34 @@ export default function EventsPage() {
           </p>
         </Card>
       </div>
+      {/* Guest Stay Section */}
+      <div className="mt-14 rounded-3xl border bg-white/80 p-8">
+        <h2 className="text-3xl font-heading text-accent">
+          Stay for Wedding Guests
+        </h2>
+
+        <p className="mt-3 text-muted-foreground">
+          50 fully air-conditioned rooms available for wedding guests and family
+          stay. Ideal for group accommodation with peaceful environment.
+        </p>
+
+        <div className="mt-6 flex gap-4">
+          <Link href="/rooms">
+            <Button>View Rooms</Button>
+          </Link>
+
+          <a
+            href={wa(
+              "Hello, I want room booking for wedding guests at Mahapragya Vihar Udaipur.",
+            )}
+            target="_blank"
+          >
+            <Button className="bg-green-600 hover:bg-green-700 text-white">
+              Book Rooms on WhatsApp
+            </Button>
+          </a>
+        </div>
+      </div>
 
       {/* WHY CHOOSE */}
       <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -133,11 +161,14 @@ export default function EventsPage() {
           </Button>
         </a>
       </div>
+      <p className="mt-3 text-sm text-muted-foreground">
+        Rooms get booked quickly during wedding season
+      </p>
 
       {/* FINAL CTA */}
       <div className="mt-14 rounded-3xl border bg-white/80 p-8">
         <h2 className="text-3xl font-heading text-accent">
-          Plan Your Event with Us
+          Plan Your Wedding with Stay Included
         </h2>
 
         <p className="mt-3 text-muted-foreground">

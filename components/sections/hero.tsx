@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 const highlights = [
-  { icon: CalendarDays, label: "AC & Non-AC rooms" },
+  { icon: CalendarDays, label: "Luxury AC Rooms rooms" },
   { icon: Images, label: "Room & venue gallery" },
   { icon: PhoneCall, label: "Bhuwana Udaipur contact" },
   { icon: Building2, label: "Jain stay & events" },
@@ -22,11 +22,11 @@ export function HeroSection() {
 
           <div className="space-y-5">
             <h1 className="max-w-3xl font-heading text-5xl leading-tight text-accent md:text-7xl">
-              Rooms, Jain Dharamshala & Wedding Hall in Bhuwana, Udaipur
+              Rooms, Jain Bhojanshala & Wedding Hall in Bhuwana, Udaipur
             </h1>
 
             <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-              Mahapragya Vihar offers AC and Non-AC rooms, wedding halls, garden
+              Mahapragya Vihar offers Luxury AC Rooms rooms, wedding halls, garden
               space and pravachan venue in Bhuwana, Udaipur. A trusted Jain stay
               for family visits, spiritual programs and community events.
             </p>

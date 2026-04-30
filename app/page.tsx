@@ -10,8 +10,8 @@ import { contactDetails, siteHighlights } from "@/lib/site-content";
 const highlights = [
   {
     icon: BedDouble,
-    title: "50 Comfortable Rooms",
-    copy: "AC and Non-AC rooms available for families, guests and group stays.",
+    title: "50 Luxury AC Rooms",
+    copy: "Fully air-conditioned rooms designed for comfortable stay for families and wedding guests.",
   },
   {
     icon: Sparkles,
@@ -21,7 +21,7 @@ const highlights = [
   {
     icon: Images,
     title: "Wedding & Events",
-    copy: "Suitable venue for weddings, engagements, pravachan and gatherings.",
+    copy: "Perfect venue for weddings, engagements, pravachan and gatherings.",
   },
   {
     icon: Home,
@@ -31,7 +31,7 @@ const highlights = [
   {
     icon: PhoneCall,
     title: "Direct Assistance",
-    copy: "Contact our team for room booking, events and stay support.",
+    copy: "Connect directly with our team for room booking and event support.",
   },
 ];
 
@@ -82,9 +82,7 @@ export default function HomePage() {
             </h2>
 
             <p className="text-sm leading-7 text-muted-foreground">
-              Mahapragya Vihar offers comfortable rooms, event spaces and a
-              peaceful environment for families, wedding guests and spiritual
-              visitors in Bhuwana, Udaipur.
+              Mahapragya Vihar offers 50 luxury air-conditioned rooms, event spaces and a peaceful environment for families, wedding guests and spiritual visitors in Bhuwana, Udaipur.
             </p>
 
             <div className="flex flex-wrap gap-3">

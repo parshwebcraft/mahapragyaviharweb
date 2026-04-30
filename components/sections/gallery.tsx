@@ -16,7 +16,7 @@ export function GallerySection() {
         </h2>
 
         <p className="mt-4 max-w-2xl text-muted-foreground">
-          Explore real photos of AC rooms, Non-AC rooms, wedding setups, garden
+          Explore real photos of Luxury AC Rooms rooms, wedding setups, garden
           area and event halls at Mahapragya Vihar, Bhuwana Udaipur.
         </p>
       </div>
@@ -35,7 +35,7 @@ export function GallerySection() {
                 index === 0
                   ? "AC room 1 at Mahapragya Vihar Bhuwana Udaipur"
                   : index === 1
-                    ? "Non AC room 2 at Mahapragya Vihar Bhuwana Udaipur"
+                    ? "AC room 2 at Mahapragya Vihar Bhuwana Udaipur"
                     : "Wedding and event venue Mahapragya Vihar Udaipur"
               }
               fill

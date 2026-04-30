@@ -46,7 +46,7 @@ export const contactDetails = {
 };
 
 export const siteHighlights = [
-  "AC and Non-AC room options",
+  "Luxury AC Rooms room options",
   "Peaceful campus with event spaces",
   "Simple room availability tracking",
   "Helpful contact and support pages"

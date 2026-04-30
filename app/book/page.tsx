@@ -44,7 +44,7 @@ export default function BookPage() {
           </h2>
 
           <p className="mt-2 text-sm text-muted-foreground">
-            AC and Non-AC rooms for families, wedding guests and group stay.
+            AC rooms for families, wedding guests and group stay.
           </p>
 
           <a
