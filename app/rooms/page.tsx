@@ -1,154 +1,178 @@
 "use client";
 
 import Image from "next/image";
-import { Users, MapPin } from "lucide-react";
+import { BedDouble, Building2, CalendarDays, MapPin, MessageCircle, PhoneCall, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
-const rooms = [
+const venues = [
   {
-    id: 1,
-    type: "Luxury AC Room (Double Bed)",
-    price: 2000,
-    occupancy: "2 Guests",
+    title: "Pravachan Hall",
+    image: "/WhatsApp Image 2026-05-10 at 11.18.10.jpeg",
+    capacity: "Spiritual programs & community gatherings",
+    icon: Building2,
+    details: [
+      "Peaceful hall for pravachan and religious programs",
+      "Suitable for Jain samaj events and satsang",
+      "Clean campus support with direct management coordination"
+    ]
+  },
+  {
+    title: "Banquet Hall",
+    image: "/room-1.jpg",
+    capacity: "Wedding, engagement & family functions",
+    icon: CalendarDays,
+    details: [
+      "Indoor function space for wedding ceremonies",
+      "Ideal for engagement, reception and family events",
+      "Booking details and arrangements discussed on call"
+    ]
+  },
+  {
+    title: "Mahashraman Sabhagar",
+    image: "/WhatsApp Image 2026-05-10 at 11.18.10.jpeg",
+    capacity: "Large sabha, meetings & cultural programs",
+    icon: Users,
+    details: [
+      "Spacious sabhagar for large community gatherings",
+      "Suitable for programs, meetings and formal events",
+      "Team support available for planning and scheduling"
+    ]
+  },
+  {
+    title: "AC Rooms",
     image: "/rooms/room1.jpg",
-    amenities: [
-      "Air Conditioned",
-      "1 Double Bed",
-      "Attached Bathroom",
-      "Clean & Peaceful Stay",
-    ],
-  },
-  {
-    id: 2,
-    type: "Luxury AC Family Room (Two Double Beds)",
-    price: 3000,
-    occupancy: "4 Guests",
-    image: "/rooms/room2.jpg",
-    amenities: [
-      "Air Conditioned",
-      "2 Double Beds",
-      "Spacious Room",
-      "Ideal for Families & Wedding Guests",
-    ],
-  },
+    capacity: "Family stay & wedding guest accommodation",
+    icon: BedDouble,
+    details: [
+      "50 fully air-conditioned rooms for comfortable stay",
+      "Best for wedding guests, families and group bookings",
+      "Room availability and pricing discussed directly"
+    ]
+  }
 ];
 
-export default function RoomsPage() {
-  const WHATSAPP = "919829074922";
+const nearbyPlaces = ["Fateh Sagar Lake", "City Palace", "Saheliyon Ki Bari"];
 
-  const bookNow = (room: any) => {
-    const msg = `Hello, I want to book ${room.type} at Mahapragya Vihar Udaipur.
-Occupancy: ${room.occupancy}
-Price: ₹${room.price}`;
+export default function VenuePage() {
+  const whatsapp = "919829074922";
 
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
-  };
+  function openWhatsApp(title: string) {
+    const message = `Hello, I want details for ${title} booking at Mahapragya Vihar, Bhuwana Udaipur. Please share availability and charges.`;
+    window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, "_blank");
+  }
 
   return (
     <main className="section-shell py-16">
-      {/* Header */}
       <div className="max-w-4xl">
-        <h1 className="text-5xl font-heading text-accent">
-          Luxury AC Rooms in Udaipur for Wedding Guests & Stay
+        <p className="text-sm uppercase tracking-[0.3em] text-accent/70">Venue & Rooms</p>
+        <h1 className="mt-3 font-heading text-5xl leading-tight text-accent md:text-6xl">
+          Pravachan Hall, Banquet Hall, Mahashraman Sabhagar & AC Rooms
         </h1>
-
-        <p className="mt-4 text-muted-foreground">
-          Mahapragya Vihar offers 50 fully air-conditioned luxury rooms in
-          Bhuwana, Udaipur. Perfect for weddings, family stays and group
-          bookings.
+        <p className="mt-6 text-lg leading-8 text-muted-foreground">
+          Mahapragya Vihar in Bhuwana, Udaipur offers peaceful event spaces and
+          comfortable AC rooms for pravachan, weddings, family functions,
+          community programs and group stay.
         </p>
       </div>
 
-      {/* Room Cards */}
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
-        {rooms.map((room) => (
-          <div
-            key={room.id}
-            className="rounded-3xl border overflow-hidden bg-white"
-          >
-            <Image
-              src={room.image}
-              alt={room.type}
-              width={600}
-              height={350}
-              className="w-full h-[260px] object-cover"
-            />
-
-            <div className="p-6">
-              <h2 className="text-2xl font-heading text-accent">{room.type}</h2>
-
-              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                <Users className="h-4 w-4" />
-                {room.occupancy}
-              </div>
-
-              <p className="mt-3 text-lg font-semibold text-accent">
-                ₹{room.price} / night
-              </p>
-
-              <div className="mt-4 text-sm text-muted-foreground">
-                {room.amenities.map((a, i) => (
-                  <div key={i}>• {a}</div>
-                ))}
-              </div>
-
-              <Button
-                className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white"
-                onClick={() => bookNow(room)}
-              >
-                Book on WhatsApp
-              </Button>
-            </div>
+      <Card className="mt-10 p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-2xl font-heading text-accent">Booking charges on discussion</h2>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Venue and room charges depend on dates, function type, guest count
+              and required arrangements. Please call or WhatsApp for exact details.
+            </p>
           </div>
-        ))}
+
+          <div className="flex flex-wrap gap-3">
+            <a href="tel:+917733992007">
+              <Button size="lg">
+                <PhoneCall className="mr-2 h-4 w-4" />
+                Call Now
+              </Button>
+            </a>
+            <Button size="lg" className="bg-green-600 text-white hover:bg-green-700" onClick={() => openWhatsApp("venue and rooms")}>
+              <MessageCircle className="mr-2 h-4 w-4" />
+              WhatsApp
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      <div className="mt-12 grid gap-6 md:grid-cols-2">
+        {venues.map((venue) => {
+          const Icon = venue.icon;
+
+          return (
+            <Card key={venue.title} className="overflow-hidden p-0">
+              <div className="relative h-72 w-full">
+                <Image src={venue.image} alt={venue.title} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+                <div className="absolute bottom-5 left-5 right-5 text-white">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/18 backdrop-blur-md">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h2 className="font-heading text-3xl">{venue.title}</h2>
+                  <p className="mt-1 text-sm text-white/82">{venue.capacity}</p>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="grid gap-3 text-sm leading-6 text-muted-foreground">
+                  {venue.details.map((detail) => (
+                    <div key={detail} className="flex gap-3">
+                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                      <span>{detail}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Button className="flex-1" onClick={() => openWhatsApp(venue.title)}>
+                    Discuss Booking
+                  </Button>
+                  <a href="tel:+917733992007" className="flex-1">
+                    <Button variant="secondary" className="w-full">
+                      Call Details
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Trust Section */}
       <div className="mt-16">
-        <h2 className="text-3xl font-heading text-accent">
-          Why Choose Mahapragya Vihar?
-        </h2>
+        <h2 className="text-3xl font-heading text-accent">Why Choose Mahapragya Vihar?</h2>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border p-4">
-            <p className="font-semibold">50 AC Rooms</p>
-            <p className="text-sm text-muted-foreground">
-              All rooms are fully air-conditioned for comfort.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <p className="font-semibold">Ideal for Weddings</p>
-            <p className="text-sm text-muted-foreground">
-              Perfect stay for wedding guests and families.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <p className="font-semibold">Peaceful Location</p>
-            <p className="text-sm text-muted-foreground">
-              Located in Bhuwana, Udaipur with calm surroundings.
-            </p>
-          </div>
+          {[
+            ["Venue + Stay", "Event spaces and AC rooms available on one peaceful campus."],
+            ["Ideal for Jain Programs", "Suitable for pravachan, sabha, weddings and community functions."],
+            ["Prime Bhuwana Location", "Convenient Udaipur location with easy access for guests."]
+          ].map(([title, copy]) => (
+            <Card key={title} className="p-5">
+              <p className="font-semibold text-accent">{title}</p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{copy}</p>
+            </Card>
+          ))}
         </div>
       </div>
 
-      {/* Nearby */}
       <div className="mt-16">
-        <h2 className="text-3xl font-heading text-accent">
-          Nearby Places in Udaipur
-        </h2>
+        <h2 className="text-3xl font-heading text-accent">Nearby Places in Udaipur</h2>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {["Fateh Sagar Lake", "City Palace", "Saheliyon Ki Bari"].map(
-            (place) => (
-              <div key={place} className="rounded-xl border p-4">
-                <MapPin className="h-5 w-5 text-accent" />
-                <p className="mt-2">{place}</p>
-              </div>
-            ),
-          )}
+          {nearbyPlaces.map((place) => (
+            <Card key={place} className="p-5">
+              <MapPin className="h-5 w-5 text-accent" />
+              <p className="mt-2 font-medium">{place}</p>
+            </Card>
+          ))}
         </div>
       </div>
     </main>

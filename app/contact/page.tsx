@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 
 const team = [
   {
-    role: "Adhyaksh (President)",
+    role: "President",
     name: "Kamal Ji Nahata",
     phone: "917733992007",
   },
   {
-    role: "Mahamantri",
+    role: "General Seceratory",
     name: "Abhishek Ji Pokharna",
     phone: "919829074922",
   },

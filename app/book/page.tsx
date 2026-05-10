@@ -8,6 +8,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BookingForm } from "@/components/booking-form";
 
 export default function BookPage() {
   const WHATSAPP = "919829074922";
@@ -99,6 +100,8 @@ export default function BookPage() {
           </a>
         </Card>
       </div>
+
+      <BookingForm />
 
       {/* CTA */}
       <div className="mx-auto mt-14 max-w-3xl rounded-3xl border bg-white/80 p-8 text-center">

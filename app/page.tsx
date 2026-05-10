@@ -87,7 +87,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-3">
               <Link href="/rooms">
-                <Button>View Rooms</Button>
+                <Button>View Venue</Button>
               </Link>
 
               <Link href="/contact">

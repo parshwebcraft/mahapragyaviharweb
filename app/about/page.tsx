@@ -31,11 +31,12 @@ const teamMembers = [
     name: "To Be Updated",
     icon: BadgeIndianRupee
   },
-  {
+  /* {
     role: "IT Team Lead",
     name: "Gauransh Jaroli",
     icon: MonitorSmartphone
   }
+    */
 ];
 
 export default function AboutPage() {

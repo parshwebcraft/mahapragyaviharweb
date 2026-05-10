@@ -49,7 +49,7 @@ export function GallerySection() {
       {/* CTA Section */}
       <div className="mt-10 flex flex-wrap gap-4">
         <Link href="/rooms">
-          <Button>Check Rooms</Button>
+          <Button>Check Venue</Button>
         </Link>
 
         <Link href="/events">

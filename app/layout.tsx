@@ -3,9 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { PwaRegister } from "@/components/pwa-register";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { FloatingBranding } from "@/components/floating-branding";
+import { SiteChrome } from "@/components/site-chrome";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -98,14 +96,9 @@ export default function RootLayout({
       <body>
         <PwaRegister />
 
-        <div className="relative min-h-screen overflow-x-hidden">
-          <SiteHeader />
+        <SiteChrome>
           {children}
-          <SiteFooter />
-        </div>
-
-        {/* Floating Branding */}
-        <FloatingBranding />
+        </SiteChrome>
 
         {/* SEO Structured Data */}
         <script

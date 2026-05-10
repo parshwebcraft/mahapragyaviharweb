@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,6 +14,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("admin123");
   const [message, setMessage] = useState("Use the admin credentials to access the panel.");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -47,11 +49,22 @@ export default function AdminLoginPage() {
         <p className="text-sm leading-7 text-muted-foreground">{message}</p>
         <div className="space-y-4">
           <Input value={email} onChange={(event) => setEmail(event.target.value)} type="email" />
-          <Input
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            type="password"
-          />
+          <div className="relative">
+            <Input
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              type={showPassword ? "text" : "password"}
+              className="pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((current) => !current)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-accent"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+          </div>
           <Button className="w-full" onClick={handleSubmit} disabled={loading}>
             {loading ? "Signing in..." : "Login"}
           </Button>

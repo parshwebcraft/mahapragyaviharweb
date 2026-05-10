@@ -12,7 +12,7 @@ export interface RoomRecord {
 
 export const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/rooms", label: "Rooms" },
+  { href: "/rooms", label: "Venue" },
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
@@ -21,7 +21,7 @@ export const navLinks = [
 ];
 
 export const footerLinks = [
-  { href: "/rooms", label: "Rooms" },
+  { href: "/rooms", label: "Venue" },
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
@@ -31,6 +31,7 @@ export const footerLinks = [
 ];
 
 export const galleryImages = [
+  "/WhatsApp Image 2026-05-10 at 11.18.10.jpeg",
   "/room-1.jpg",
   "/room-2.JPG",
   "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
@@ -46,15 +47,15 @@ export const contactDetails = {
 };
 
 export const siteHighlights = [
-  "Luxury AC Rooms room options",
+  "Venue and AC room options",
   "Peaceful campus with event spaces",
   "Simple room availability tracking",
   "Helpful contact and support pages"
 ];
 
-export const roomInventorySeed: RoomRecord[] = Array.from({ length: 36 }, (_, index) => {
-  const acRoom = index < 18;
-  const roomNumber = `${acRoom ? "A" : "N"}-${String((index % 18) + 1).padStart(2, "0")}`;
+export const roomInventorySeed: RoomRecord[] = Array.from({ length: 50 }, (_, index) => {
+  const acRoom = index < 40;
+  const roomNumber = `${acRoom ? "A" : "N"}-${String(acRoom ? index + 1 : index - 39).padStart(2, "0")}`;
   const status: RoomStatus =
     index % 11 === 0 ? "maintenance" : index % 4 === 0 ? "occupied" : "empty";
 

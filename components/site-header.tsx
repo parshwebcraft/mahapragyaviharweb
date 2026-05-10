@@ -31,7 +31,7 @@ export function SiteHeader() {
         </nav>
         <Link href="/rooms">
           <Button variant="secondary" size="sm">
-            Explore Rooms
+            Explore Venue
           </Button>
         </Link>
       </div>
