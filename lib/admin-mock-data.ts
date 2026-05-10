@@ -1,6 +1,6 @@
 export type AdminRoomStatus = "available" | "occupied" | "reserved" | "maintenance";
 export type BookingStatus = "pending" | "confirmed" | "completed" | "cancelled";
-export type InquiryStatus = "new" | "contacted" | "site_visit" | "closed";
+export type InquiryStatus = "new" | "contacted" | "site_visit" | "booking_done" | "closed";
 export type Priority = "high" | "medium" | "low";
 export type EmployeeStatus = "active" | "on_leave" | "inactive";
 export type AttendanceStatus = "present" | "absent" | "leave";
@@ -36,6 +36,11 @@ export interface WeddingInquiry {
   familyName: string;
   phone: string;
   functionDate: string;
+  functionStartDate?: string;
+  functionEndDate?: string;
+  daysBlocked?: number;
+  venueRequirement?: string;
+  additionalPhones?: string;
   guestCount: number;
   roomsRequired: number;
   notes: string;

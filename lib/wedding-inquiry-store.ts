@@ -8,6 +8,11 @@ export interface WeddingInquiryInput {
   familyName?: string;
   phone?: string;
   functionDate?: string;
+  functionStartDate?: string;
+  functionEndDate?: string;
+  daysBlocked?: number;
+  venueRequirement?: string;
+  additionalPhones?: string;
   guestCount?: number;
   roomsRequired?: number;
   notes?: string;
@@ -44,10 +49,32 @@ export async function readWeddingInquiries(): Promise<WeddingInquiry[]> {
   }
 }
 
+function getInclusiveDays(startDate: string, endDate: string) {
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) {
+    return 1;
+  }
+
+  return Math.max(1, Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1);
+}
+
 function validateInquiry(input: WeddingInquiryInput) {
   const familyName = input.familyName?.trim();
   const phone = input.phone?.trim();
-  const functionDate = input.functionDate?.trim();
+  const functionStartDate = input.functionStartDate?.trim() || input.functionDate?.trim();
+  const functionEndDate = input.functionEndDate?.trim() || functionStartDate;
+  const functionDate = functionStartDate;
+  const providedDaysBlocked = Number(input.daysBlocked);
+  const daysBlocked =
+    Number.isFinite(providedDaysBlocked) && providedDaysBlocked > 0
+      ? providedDaysBlocked
+      : functionStartDate && functionEndDate
+        ? getInclusiveDays(functionStartDate, functionEndDate)
+        : 1;
+  const venueRequirement = input.venueRequirement?.trim() || "Discussion pending";
+  const additionalPhones = input.additionalPhones?.trim() || "";
   const guestCount = Number(input.guestCount);
   const roomsRequired = Number(input.roomsRequired || 0);
   const notes = input.notes?.trim() || "";
@@ -66,7 +93,29 @@ function validateInquiry(input: WeddingInquiryInput) {
     throw new Error("Rooms required must be valid.");
   }
 
-  return { familyName, phone, functionDate, guestCount, roomsRequired, notes, status, priority };
+  if (functionEndDate && functionStartDate && new Date(functionEndDate) < new Date(functionStartDate)) {
+    throw new Error("Function end date cannot be before start date.");
+  }
+
+  if (!["new", "contacted", "site_visit", "booking_done", "closed"].includes(status)) {
+    throw new Error("Inquiry status is invalid.");
+  }
+
+  return {
+    familyName,
+    phone,
+    functionDate,
+    functionStartDate,
+    functionEndDate,
+    daysBlocked,
+    venueRequirement,
+    additionalPhones,
+    guestCount,
+    roomsRequired,
+    notes,
+    status,
+    priority
+  };
 }
 
 export async function createWeddingInquiry(input: WeddingInquiryInput) {

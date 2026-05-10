@@ -51,7 +51,9 @@ export function DashboardPage({
   const activeWeddingInquiries = savedWeddingInquiries.length > 0 ? savedWeddingInquiries : weddingInquiries;
   const occupiedRooms = adminRooms.filter((room) => room.status === "occupied").length;
   const availableRooms = adminRooms.filter((room) => room.status === "available").length;
-  const pendingInquiries = activeWeddingInquiries.filter((inquiry) => inquiry.status !== "closed").length;
+  const pendingInquiries = activeWeddingInquiries.filter(
+    (inquiry) => !["booking_done", "closed"].includes(inquiry.status)
+  ).length;
   const occupancy = Math.round((occupiedRooms / adminRooms.length) * 100);
   const currentMonth = new Date().toISOString().slice(0, 7);
   const monthlyBookings = savedBookings.filter((booking) => booking.checkIn.startsWith(currentMonth)).length;
