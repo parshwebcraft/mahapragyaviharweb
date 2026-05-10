@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
-import { FloatingBranding } from "@/components/floating-branding";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
@@ -20,7 +19,6 @@ export function SiteChrome({ children }: { children: ReactNode }) {
       <SiteHeader />
       {children}
       <SiteFooter />
-      <FloatingBranding />
     </div>
   );
 }
