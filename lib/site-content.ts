@@ -34,8 +34,8 @@ export const galleryImages = [
   "/WhatsApp Image 2026-05-10 at 11.18.10.jpeg",
   "/room-1.jpg",
   "/room-2.JPG",
-  "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80"
+  "/room-3.HEIC",
+  "room-7.HEIC"
 ];
 
 export const contactDetails = {
