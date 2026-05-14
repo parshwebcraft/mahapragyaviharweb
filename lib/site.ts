@@ -6,7 +6,7 @@ export const siteConfig = {
   description:
     "Mahapragya Vihar in Bhuwana Udaipur offers Luxury AC Rooms rooms, wedding hall, garden and event venue for stay, pravachan and functions.",
 
-  ogImage: "/og-image.jpg",
+  ogImage: "/TS.png",
 
   keywords: [
     "Mahapragya Vihar Udaipur",
