@@ -7,9 +7,11 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { SalaryRecord, SalaryStatus } from "@/lib/admin-mock-data";
 import { formatINR } from "@/utils/currency";
 
+const salaryStorageKey = "mahapragya-admin-salaries";
 const emptySalary: SalaryRecord = {
   id: "",
   employeeName: "",
@@ -31,9 +33,12 @@ export function SalaryPage() {
   const advance = records.reduce((total, record) => total + record.advance, 0);
 
   async function loadSalaries() {
-    const response = await fetch("/api/salaries", { cache: "no-store" });
-    if (response.ok) {
-      setRecords(await response.json());
+    try {
+      const response = await fetch("/api/salaries", { cache: "no-store" });
+      const serverRecords = response.ok ? await response.json() : [];
+      setRecords(mergeClientRecords<SalaryRecord>(salaryStorageKey, serverRecords));
+    } catch {
+      setRecords(mergeClientRecords<SalaryRecord>(salaryStorageKey, []));
     }
   }
 
@@ -45,38 +50,46 @@ export function SalaryPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const response = await fetch("/api/salaries", {
-      method: editing.id ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editing)
-    });
+    const salaryRecord: SalaryRecord = {
+      ...editing,
+      id: editing.id || `SAL-${String(Date.now()).slice(-6)}`
+    };
 
-    const result = await response.json();
-    if (!response.ok) {
-      setError(result.error || "Salary could not be saved.");
-      return;
-    }
-
+    setError("");
+    upsertClientRecord(salaryStorageKey, salaryRecord);
+    setRecords((current) => [salaryRecord, ...current.filter((record) => record.id !== salaryRecord.id)]);
     setEditing(null);
-    await loadSalaries();
+
+    try {
+      await fetch("/api/salaries", {
+        method: editing.id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(salaryRecord)
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
+    }
   }
 
   async function deleteSalary(id: string) {
-    const response = await fetch("/api/salaries", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
+    removeClientRecord<SalaryRecord>(salaryStorageKey, id);
+    setRecords((current) => current.filter((record) => record.id !== id));
 
-    if (response.ok) {
-      await loadSalaries();
+    try {
+      await fetch("/api/salaries", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
     }
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Button onClick={() => setEditing(emptySalary)}>
+        <Button onClick={() => setEditing({ ...emptySalary })}>
           <Plus className="mr-2 h-4 w-4" />
           Create salary record
         </Button>

@@ -7,8 +7,10 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { BookingStatus, RoomBooking } from "@/lib/booking-store";
 
+const bookingStorageKey = "mahapragya-admin-bookings";
 const emptyBooking: RoomBooking = {
   id: "",
   guestName: "",
@@ -36,9 +38,10 @@ export function BookingsManagementPage() {
 
     try {
       const response = await fetch("/api/bookings", { cache: "no-store" });
-      if (!response.ok) throw new Error("Could not load bookings.");
-      setBookings(await response.json());
+      const serverBookings = response.ok ? await response.json() : [];
+      setBookings(mergeClientRecords<RoomBooking>(bookingStorageKey, serverBookings));
     } catch (loadError) {
+      setBookings(mergeClientRecords<RoomBooking>(bookingStorageKey, []));
       setError(loadError instanceof Error ? loadError.message : "Could not load bookings.");
     } finally {
       setLoading(false);
@@ -53,32 +56,42 @@ export function BookingsManagementPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const method = editing.id ? "PUT" : "POST";
-    const response = await fetch("/api/bookings", {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editing)
-    });
+    const now = new Date().toISOString();
+    const booking: RoomBooking = {
+      ...editing,
+      id: editing.id || `BK-${String(Date.now()).slice(-6)}`,
+      createdAt: editing.createdAt || now,
+      updatedAt: now
+    };
 
-    const result = await response.json();
-    if (!response.ok) {
-      setError(result.error || "Booking could not be saved.");
-      return;
-    }
-
+    setError("");
+    upsertClientRecord(bookingStorageKey, booking);
+    setBookings((current) => [booking, ...current.filter((item) => item.id !== booking.id)]);
     setEditing(null);
-    await loadBookings();
+
+    try {
+      await fetch("/api/bookings", {
+        method: editing.id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(booking)
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
+    }
   }
 
   async function deleteBooking(id: string) {
-    const response = await fetch("/api/bookings", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
+    removeClientRecord<RoomBooking>(bookingStorageKey, id);
+    setBookings((current) => current.filter((booking) => booking.id !== id));
 
-    if (response.ok) {
-      await loadBookings();
+    try {
+      await fetch("/api/bookings", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
     }
   }
 
@@ -89,7 +102,7 @@ export function BookingsManagementPage() {
           <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
-        <Button onClick={() => setEditing(emptyBooking)}>
+        <Button onClick={() => setEditing({ ...emptyBooking })}>
           <Plus className="mr-2 h-4 w-4" />
           Create booking
         </Button>

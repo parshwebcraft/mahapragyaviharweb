@@ -1,10 +1,14 @@
+"use client";
+
 import { ArrowRight, BedDouble, CalendarDays, ClipboardCheck, Users } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { adminRooms, employees, weddingInquiries, type AdminBooking } from "@/lib/admin-mock-data";
+import { mergeClientRecords } from "@/lib/client-record-store";
 import type { Employee, WeddingInquiry } from "@/lib/admin-mock-data";
 import type { RoomBooking } from "@/lib/booking-store";
 
@@ -47,14 +51,24 @@ export function DashboardPage({
   savedEmployees?: Employee[];
   savedWeddingInquiries?: WeddingInquiry[];
 }) {
-  const adminBookings = savedBookings.map(fromSavedBooking);
-  const activeWeddingInquiries = savedWeddingInquiries.length > 0 ? savedWeddingInquiries : weddingInquiries;
+  const [clientBookings, setClientBookings] = useState(savedBookings);
+  const [clientEmployees, setClientEmployees] = useState(savedEmployees);
+  const [clientWeddingBookings, setClientWeddingBookings] = useState(savedWeddingInquiries);
+
+  useEffect(() => {
+    setClientBookings(mergeClientRecords<RoomBooking>("mahapragya-admin-bookings", savedBookings));
+    setClientEmployees(mergeClientRecords<Employee>("mahapragya-admin-employees", savedEmployees));
+    setClientWeddingBookings(mergeClientRecords<WeddingInquiry>("mahapragya-admin-wedding-bookings", savedWeddingInquiries));
+  }, [savedBookings, savedEmployees, savedWeddingInquiries]);
+
+  const adminBookings = clientBookings.map(fromSavedBooking);
+  const activeWeddingInquiries = clientWeddingBookings.length > 0 ? clientWeddingBookings : weddingInquiries;
   const occupiedRooms = adminRooms.filter((room) => room.status === "occupied").length;
   const availableRooms = adminRooms.filter((room) => room.status === "available").length;
   const weddingBookingsCount = activeWeddingInquiries.length;
   const occupancy = Math.round((occupiedRooms / adminRooms.length) * 100);
   const currentMonth = new Date().toISOString().slice(0, 7);
-  const monthlyBookings = savedBookings.filter((booking) => booking.checkIn.startsWith(currentMonth)).length;
+  const monthlyBookings = clientBookings.filter((booking) => booking.checkIn.startsWith(currentMonth)).length;
 
   return (
     <div className="space-y-6">
@@ -62,7 +76,7 @@ export function DashboardPage({
         <StatCard label="Total Rooms" value={adminRooms.length} icon={BedDouble} />
         <StatCard label="Occupied Rooms" value={occupiedRooms} icon={ClipboardCheck} />
         <StatCard label="Available Rooms" value={availableRooms} icon={BedDouble} />
-        <StatCard label="Total Employees" value={savedEmployees.length || employees.length} icon={Users} />
+        <StatCard label="Total Employees" value={clientEmployees.length || employees.length} icon={Users} />
         <StatCard label="Monthly Bookings" value={monthlyBookings} icon={CalendarDays} />
         <StatCard label="Wedding Bookings" value={weddingBookingsCount} icon={ClipboardCheck} />
       </div>

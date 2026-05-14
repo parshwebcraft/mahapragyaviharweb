@@ -6,9 +6,11 @@ import { Pencil, Trash2 } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { mergeClientRecords } from "@/lib/client-record-store";
 import type { AttendanceRecord, AttendanceStatus, Employee } from "@/lib/admin-mock-data";
 
 const statusOrder: AttendanceStatus[] = ["present", "absent", "leave"];
+const employeeStorageKey = "mahapragya-admin-employees";
 const attendanceStorageKey = "mahapragya-vihar-attendance-records";
 const removedAttendanceKey = "mahapragya-vihar-removed-attendance-employees";
 
@@ -30,9 +32,8 @@ export function AttendancePage() {
   useEffect(() => {
     async function loadEmployees() {
       const response = await fetch("/api/employees", { cache: "no-store" });
-      if (!response.ok) return;
-
-      const employees = (await response.json()) as Employee[];
+      const serverEmployees = response.ok ? await response.json() : [];
+      const employees = mergeClientRecords<Employee>(employeeStorageKey, serverEmployees);
       const savedRecords = JSON.parse(localStorage.getItem(attendanceStorageKey) || "[]") as AttendanceRecord[];
       const removedEmployeeIds = JSON.parse(localStorage.getItem(removedAttendanceKey) || "[]") as string[];
       setRecords(

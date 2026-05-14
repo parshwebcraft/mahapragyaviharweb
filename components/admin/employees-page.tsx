@@ -7,9 +7,11 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { Employee } from "@/lib/admin-mock-data";
 import { formatINR } from "@/utils/currency";
 
+const employeeStorageKey = "mahapragya-admin-employees";
 const departments: Employee["department"][] = [
   "Reception",
   "Management",
@@ -41,9 +43,12 @@ export function EmployeesPage() {
   const [error, setError] = useState("");
 
   async function loadEmployees() {
-    const response = await fetch("/api/employees", { cache: "no-store" });
-    if (response.ok) {
-      setEmployees(await response.json());
+    try {
+      const response = await fetch("/api/employees", { cache: "no-store" });
+      const serverEmployees = response.ok ? await response.json() : [];
+      setEmployees(mergeClientRecords<Employee>(employeeStorageKey, serverEmployees));
+    } catch {
+      setEmployees(mergeClientRecords<Employee>(employeeStorageKey, []));
     }
   }
 
@@ -55,31 +60,39 @@ export function EmployeesPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const response = await fetch("/api/employees", {
-      method: editing.id ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editing)
-    });
+    const employee: Employee = {
+      ...editing,
+      id: editing.id || `EMP-${String(Date.now()).slice(-6)}`
+    };
 
-    const result = await response.json();
-    if (!response.ok) {
-      setError(result.error || "Employee could not be saved.");
-      return;
-    }
-
+    setError("");
+    upsertClientRecord(employeeStorageKey, employee);
+    setEmployees((current) => [employee, ...current.filter((item) => item.id !== employee.id)]);
     setEditing(null);
-    await loadEmployees();
+
+    try {
+      await fetch("/api/employees", {
+        method: editing.id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(employee)
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
+    }
   }
 
   async function deleteEmployee(id: string) {
-    const response = await fetch("/api/employees", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
+    removeClientRecord<Employee>(employeeStorageKey, id);
+    setEmployees((current) => current.filter((employee) => employee.id !== id));
 
-    if (response.ok) {
-      await loadEmployees();
+    try {
+      await fetch("/api/employees", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
     }
   }
 

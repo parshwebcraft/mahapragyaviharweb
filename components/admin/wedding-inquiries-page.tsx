@@ -7,8 +7,10 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { InquiryStatus, Priority, WeddingInquiry } from "@/lib/admin-mock-data";
 
+const weddingBookingStorageKey = "mahapragya-admin-wedding-bookings";
 const emptyInquiry: WeddingInquiry = {
   id: "",
   familyName: "",
@@ -77,9 +79,10 @@ export function WeddingInquiriesPage() {
 
     try {
       const response = await fetch("/api/wedding-inquiries", { cache: "no-store" });
-      if (!response.ok) throw new Error("Could not load wedding bookings.");
-      setInquiries(await response.json());
+      const serverBookings = response.ok ? await response.json() : [];
+      setInquiries(mergeClientRecords<WeddingInquiry>(weddingBookingStorageKey, serverBookings));
     } catch (loadError) {
+      setInquiries(mergeClientRecords<WeddingInquiry>(weddingBookingStorageKey, []));
       setError(loadError instanceof Error ? loadError.message : "Could not load wedding bookings.");
     } finally {
       setLoading(false);
@@ -94,31 +97,40 @@ export function WeddingInquiriesPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const response = await fetch("/api/wedding-inquiries", {
-      method: editing.id ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editing)
-    });
+    const booking: WeddingInquiry = {
+      ...editing,
+      id: editing.id || `WI-${String(Date.now()).slice(-6)}`,
+      functionDate: editing.functionStartDate || editing.functionDate
+    };
 
-    const result = await response.json();
-    if (!response.ok) {
-      setError(result.error || "Wedding booking could not be saved.");
-      return;
-    }
-
+    setError("");
+    upsertClientRecord(weddingBookingStorageKey, booking);
+    setInquiries((current) => [booking, ...current.filter((item) => item.id !== booking.id)]);
     setEditing(null);
-    await loadInquiries();
+
+    try {
+      await fetch("/api/wedding-inquiries", {
+        method: editing.id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(booking)
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
+    }
   }
 
   async function deleteInquiry(id: string) {
-    const response = await fetch("/api/wedding-inquiries", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
+    removeClientRecord<WeddingInquiry>(weddingBookingStorageKey, id);
+    setInquiries((current) => current.filter((inquiry) => inquiry.id !== id));
 
-    if (response.ok) {
-      await loadInquiries();
+    try {
+      await fetch("/api/wedding-inquiries", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+    } catch {
+      // Browser storage keeps admin data working on read-only deployments.
     }
   }
 
