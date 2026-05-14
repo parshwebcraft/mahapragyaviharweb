@@ -7,10 +7,8 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { InquiryStatus, Priority, WeddingInquiry } from "@/lib/admin-mock-data";
 
-const weddingBookingStorageKey = "mahapragya-admin-wedding-bookings";
 const emptyInquiry: WeddingInquiry = {
   id: "",
   familyName: "",
@@ -79,10 +77,9 @@ export function WeddingInquiriesPage() {
 
     try {
       const response = await fetch("/api/wedding-inquiries", { cache: "no-store" });
-      const serverBookings = response.ok ? await response.json() : [];
-      setInquiries(mergeClientRecords<WeddingInquiry>(weddingBookingStorageKey, serverBookings));
+      if (!response.ok) throw new Error("Could not load wedding bookings.");
+      setInquiries(await response.json());
     } catch (loadError) {
-      setInquiries(mergeClientRecords<WeddingInquiry>(weddingBookingStorageKey, []));
       setError(loadError instanceof Error ? loadError.message : "Could not load wedding bookings.");
     } finally {
       setLoading(false);
@@ -97,40 +94,37 @@ export function WeddingInquiriesPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const booking: WeddingInquiry = {
-      ...editing,
-      id: editing.id || `WI-${String(Date.now()).slice(-6)}`,
-      functionDate: editing.functionStartDate || editing.functionDate
-    };
-
     setError("");
-    upsertClientRecord(weddingBookingStorageKey, booking);
-    setInquiries((current) => [booking, ...current.filter((item) => item.id !== booking.id)]);
-    setEditing(null);
 
     try {
-      await fetch("/api/wedding-inquiries", {
+      const response = await fetch("/api/wedding-inquiries", {
         method: editing.id ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(booking)
+        body: JSON.stringify(editing)
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Wedding booking could not be saved.");
+
+      const booking = result.inquiry as WeddingInquiry;
+      setInquiries((current) => [booking, ...current.filter((item) => item.id !== booking.id)]);
+      setEditing(null);
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Wedding booking could not be saved.");
     }
   }
 
   async function deleteInquiry(id: string) {
-    removeClientRecord<WeddingInquiry>(weddingBookingStorageKey, id);
-    setInquiries((current) => current.filter((inquiry) => inquiry.id !== id));
-
     try {
-      await fetch("/api/wedding-inquiries", {
+      const response = await fetch("/api/wedding-inquiries", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+      if (!response.ok) throw new Error("Wedding booking could not be deleted.");
+      setInquiries((current) => current.filter((inquiry) => inquiry.id !== id));
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Wedding booking could not be deleted.");
     }
   }
 

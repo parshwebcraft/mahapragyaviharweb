@@ -1,7 +1,5 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
-
 import type { Employee } from "@/lib/admin-mock-data";
+import { deleteRecord, readCollection, upsertRecord } from "@/lib/supabase-record-store";
 
 export interface EmployeeInput {
   id?: string;
@@ -14,33 +12,10 @@ export interface EmployeeInput {
   status?: Employee["status"];
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const EMPLOYEES_FILE = path.join(DATA_DIR, "employees.json");
-
-async function ensureFile() {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  try {
-    await readFile(EMPLOYEES_FILE, "utf8");
-  } catch {
-    await writeFile(EMPLOYEES_FILE, "[]", "utf8");
-  }
-}
-
-async function writeEmployees(employees: Employee[]) {
-  await ensureFile();
-  await writeFile(EMPLOYEES_FILE, JSON.stringify(employees, null, 2), "utf8");
-}
+const COLLECTION = "employees";
 
 export async function readEmployees(): Promise<Employee[]> {
-  await ensureFile();
-
-  try {
-    const parsed = JSON.parse(await readFile(EMPLOYEES_FILE, "utf8"));
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+  return readCollection<Employee>(COLLECTION);
 }
 
 function validateEmployee(input: EmployeeInput) {
@@ -64,36 +39,19 @@ function validateEmployee(input: EmployeeInput) {
 }
 
 export async function createEmployee(input: EmployeeInput) {
-  const employees = await readEmployees();
   const employee: Employee = {
-    id: `EMP-${String(Date.now()).slice(-6)}`,
+    id: input.id || `EMP-${String(Date.now()).slice(-6)}`,
     ...validateEmployee(input)
   };
 
-  await writeEmployees([employee, ...employees]);
-  return employee;
+  return upsertRecord(COLLECTION, employee);
 }
 
 export async function updateEmployee(id: string, input: EmployeeInput) {
-  const employees = await readEmployees();
-  const existing = employees.find((employee) => employee.id === id);
-
-  if (!existing) {
-    throw new Error("Employee not found.");
-  }
-
-  const updated: Employee = { ...existing, ...validateEmployee(input), id };
-  await writeEmployees(employees.map((employee) => (employee.id === id ? updated : employee)));
-  return updated;
+  const updated: Employee = { id, ...validateEmployee(input) };
+  return upsertRecord(COLLECTION, updated);
 }
 
 export async function deleteEmployee(id: string) {
-  const employees = await readEmployees();
-  const nextEmployees = employees.filter((employee) => employee.id !== id);
-
-  if (nextEmployees.length === employees.length) {
-    throw new Error("Employee not found.");
-  }
-
-  await writeEmployees(nextEmployees);
+  await deleteRecord(COLLECTION, id);
 }

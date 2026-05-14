@@ -1,7 +1,5 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
-
 import type { SalaryRecord } from "@/lib/admin-mock-data";
+import { deleteRecord, readCollection, upsertRecord } from "@/lib/supabase-record-store";
 
 export interface SalaryInput {
   id?: string;
@@ -14,33 +12,10 @@ export interface SalaryInput {
   status?: SalaryRecord["status"];
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const SALARIES_FILE = path.join(DATA_DIR, "salaries.json");
-
-async function ensureFile() {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  try {
-    await readFile(SALARIES_FILE, "utf8");
-  } catch {
-    await writeFile(SALARIES_FILE, "[]", "utf8");
-  }
-}
-
-async function writeSalaries(records: SalaryRecord[]) {
-  await ensureFile();
-  await writeFile(SALARIES_FILE, JSON.stringify(records, null, 2), "utf8");
-}
+const COLLECTION = "salaries";
 
 export async function readSalaries(): Promise<SalaryRecord[]> {
-  await ensureFile();
-
-  try {
-    const parsed = JSON.parse(await readFile(SALARIES_FILE, "utf8"));
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+  return readCollection<SalaryRecord>(COLLECTION);
 }
 
 function validateSalary(input: SalaryInput) {
@@ -64,36 +39,19 @@ function validateSalary(input: SalaryInput) {
 }
 
 export async function createSalary(input: SalaryInput) {
-  const records = await readSalaries();
   const record: SalaryRecord = {
-    id: `SAL-${String(Date.now()).slice(-6)}`,
+    id: input.id || `SAL-${String(Date.now()).slice(-6)}`,
     ...validateSalary(input)
   };
 
-  await writeSalaries([record, ...records]);
-  return record;
+  return upsertRecord(COLLECTION, record);
 }
 
 export async function updateSalary(id: string, input: SalaryInput) {
-  const records = await readSalaries();
-  const existing = records.find((record) => record.id === id);
-
-  if (!existing) {
-    throw new Error("Salary record not found.");
-  }
-
-  const updated: SalaryRecord = { ...existing, ...validateSalary(input), id };
-  await writeSalaries(records.map((record) => (record.id === id ? updated : record)));
-  return updated;
+  const updated: SalaryRecord = { id, ...validateSalary(input) };
+  return upsertRecord(COLLECTION, updated);
 }
 
 export async function deleteSalary(id: string) {
-  const records = await readSalaries();
-  const nextRecords = records.filter((record) => record.id !== id);
-
-  if (nextRecords.length === records.length) {
-    throw new Error("Salary record not found.");
-  }
-
-  await writeSalaries(nextRecords);
+  await deleteRecord(COLLECTION, id);
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -17,7 +16,6 @@ import {
 
 import { Card } from "@/components/ui/card";
 import { monthlyBookingChart, type Employee, type SalaryRecord } from "@/lib/admin-mock-data";
-import { mergeClientRecords } from "@/lib/client-record-store";
 import type { RoomBooking } from "@/lib/booking-store";
 import { formatINR } from "@/utils/currency";
 
@@ -50,23 +48,13 @@ export function ReportsPage({
   employees?: Employee[];
   salaries?: SalaryRecord[];
 }) {
-  const [clientBookings, setClientBookings] = useState(bookings);
-  const [clientEmployees, setClientEmployees] = useState(employees);
-  const [clientSalaries, setClientSalaries] = useState(salaries);
-
-  useEffect(() => {
-    setClientBookings(mergeClientRecords<RoomBooking>("mahapragya-admin-bookings", bookings));
-    setClientEmployees(mergeClientRecords<Employee>("mahapragya-admin-employees", employees));
-    setClientSalaries(mergeClientRecords<SalaryRecord>("mahapragya-admin-salaries", salaries));
-  }, [bookings, employees, salaries]);
-
-  const chartData = clientBookings.length > 0 ? buildMonthlyChart(clientBookings) : monthlyBookingChart;
+  const chartData = bookings.length > 0 ? buildMonthlyChart(bookings) : monthlyBookingChart;
   const estimatedRevenue = chartData.reduce((total, item) => total + item.revenue, 0);
   const avgOccupancy = Math.round(
     chartData.reduce((total, item) => total + item.occupancy, 0) / chartData.length
   );
-  const paidSalary = clientSalaries.filter((salary) => salary.status === "paid").reduce((total, salary) => total + salary.salary - salary.advance, 0);
-  const attendanceStats = clientEmployees.map((employee) => ({ name: employee.name.split(" ")[0], attendance: 0 }));
+  const paidSalary = salaries.filter((salary) => salary.status === "paid").reduce((total, salary) => total + salary.salary - salary.advance, 0);
+  const attendanceStats = employees.map((employee) => ({ name: employee.name.split(" ")[0], attendance: 0 }));
 
   return (
     <div className="space-y-6">

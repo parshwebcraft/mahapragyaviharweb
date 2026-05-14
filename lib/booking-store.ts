@@ -1,5 +1,4 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
+import { deleteRecord, readCollection, upsertRecord } from "@/lib/supabase-record-store";
 
 export type BookingStatus = "pending" | "confirmed" | "completed" | "cancelled";
 
@@ -19,6 +18,7 @@ export interface RoomBooking {
 }
 
 export interface BookingInput {
+  id?: string;
   guestName?: string;
   phone?: string;
   checkIn?: string;
@@ -28,45 +28,19 @@ export interface BookingInput {
   roomAssigned?: string;
   notes?: string;
   status?: BookingStatus;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const BOOKINGS_FILE = path.join(DATA_DIR, "bookings.json");
-
-async function ensureDataFile() {
-  await mkdir(DATA_DIR, { recursive: true });
-
-  try {
-    await readFile(BOOKINGS_FILE, "utf8");
-  } catch {
-    await writeFile(BOOKINGS_FILE, "[]", "utf8");
-  }
-}
+const COLLECTION = "bookings";
 
 export async function readBookings(): Promise<RoomBooking[]> {
-  await ensureDataFile();
-
-  try {
-    const raw = await readFile(BOOKINGS_FILE, "utf8");
-    const parsed = JSON.parse(raw);
-
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed.sort((a, b) => {
+  const bookings = await readCollection<RoomBooking>(COLLECTION);
+  return bookings.sort((a, b) => {
       const checkInDiff = String(a.checkIn).localeCompare(String(b.checkIn));
       if (checkInDiff !== 0) return checkInDiff;
       return String(b.createdAt).localeCompare(String(a.createdAt));
     });
-  } catch {
-    return [];
-  }
-}
-
-async function writeBookings(bookings: RoomBooking[]) {
-  await ensureDataFile();
-  await writeFile(BOOKINGS_FILE, JSON.stringify(bookings, null, 2), "utf8");
 }
 
 function validateBooking(input: BookingInput) {
@@ -114,44 +88,28 @@ export async function createBooking(input: BookingInput) {
   const now = new Date().toISOString();
 
   const booking: RoomBooking = {
-    id: `booking-${Date.now()}`,
+    id: input.id || `booking-${Date.now()}`,
     ...values,
     createdAt: now,
     updatedAt: now
   };
 
-  const bookings = await readBookings();
-  await writeBookings([booking, ...bookings]);
-
-  return booking;
+  return upsertRecord(COLLECTION, booking);
 }
 
 export async function updateBooking(id: string, input: BookingInput) {
   const values = validateBooking(input);
-  const bookings = await readBookings();
-  const existing = bookings.find((booking) => booking.id === id);
-
-  if (!existing) {
-    throw new Error("Booking not found.");
-  }
 
   const updated: RoomBooking = {
-    ...existing,
+    id,
     ...values,
+    createdAt: "createdAt" in input && typeof input.createdAt === "string" ? input.createdAt : new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
 
-  await writeBookings(bookings.map((booking) => (booking.id === id ? updated : booking)));
-  return updated;
+  return upsertRecord(COLLECTION, updated);
 }
 
 export async function deleteBooking(id: string) {
-  const bookings = await readBookings();
-  const nextBookings = bookings.filter((booking) => booking.id !== id);
-
-  if (nextBookings.length === bookings.length) {
-    throw new Error("Booking not found.");
-  }
-
-  await writeBookings(nextBookings);
+  await deleteRecord(COLLECTION, id);
 }

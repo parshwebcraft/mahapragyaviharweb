@@ -7,11 +7,9 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { SalaryRecord, SalaryStatus } from "@/lib/admin-mock-data";
 import { formatINR } from "@/utils/currency";
 
-const salaryStorageKey = "mahapragya-admin-salaries";
 const emptySalary: SalaryRecord = {
   id: "",
   employeeName: "",
@@ -35,10 +33,10 @@ export function SalaryPage() {
   async function loadSalaries() {
     try {
       const response = await fetch("/api/salaries", { cache: "no-store" });
-      const serverRecords = response.ok ? await response.json() : [];
-      setRecords(mergeClientRecords<SalaryRecord>(salaryStorageKey, serverRecords));
-    } catch {
-      setRecords(mergeClientRecords<SalaryRecord>(salaryStorageKey, []));
+      if (!response.ok) throw new Error("Could not load salaries.");
+      setRecords(await response.json());
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError.message : "Could not load salaries.");
     }
   }
 
@@ -50,39 +48,37 @@ export function SalaryPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const salaryRecord: SalaryRecord = {
-      ...editing,
-      id: editing.id || `SAL-${String(Date.now()).slice(-6)}`
-    };
-
     setError("");
-    upsertClientRecord(salaryStorageKey, salaryRecord);
-    setRecords((current) => [salaryRecord, ...current.filter((record) => record.id !== salaryRecord.id)]);
-    setEditing(null);
 
     try {
-      await fetch("/api/salaries", {
+      const response = await fetch("/api/salaries", {
         method: editing.id ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(salaryRecord)
+        body: JSON.stringify(editing)
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Salary could not be saved.");
+
+      const salaryRecord = result.salary as SalaryRecord;
+      setRecords((current) => [salaryRecord, ...current.filter((record) => record.id !== salaryRecord.id)]);
+      setEditing(null);
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Salary could not be saved.");
     }
   }
 
   async function deleteSalary(id: string) {
-    removeClientRecord<SalaryRecord>(salaryStorageKey, id);
-    setRecords((current) => current.filter((record) => record.id !== id));
-
     try {
-      await fetch("/api/salaries", {
+      const response = await fetch("/api/salaries", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+      if (!response.ok) throw new Error("Salary could not be deleted.");
+      setRecords((current) => current.filter((record) => record.id !== id));
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Salary could not be deleted.");
     }
   }
 

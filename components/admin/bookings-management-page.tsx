@@ -7,10 +7,8 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { BookingStatus, RoomBooking } from "@/lib/booking-store";
 
-const bookingStorageKey = "mahapragya-admin-bookings";
 const emptyBooking: RoomBooking = {
   id: "",
   guestName: "",
@@ -38,10 +36,9 @@ export function BookingsManagementPage() {
 
     try {
       const response = await fetch("/api/bookings", { cache: "no-store" });
-      const serverBookings = response.ok ? await response.json() : [];
-      setBookings(mergeClientRecords<RoomBooking>(bookingStorageKey, serverBookings));
+      if (!response.ok) throw new Error("Could not load bookings.");
+      setBookings(await response.json());
     } catch (loadError) {
-      setBookings(mergeClientRecords<RoomBooking>(bookingStorageKey, []));
       setError(loadError instanceof Error ? loadError.message : "Could not load bookings.");
     } finally {
       setLoading(false);
@@ -56,42 +53,37 @@ export function BookingsManagementPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const now = new Date().toISOString();
-    const booking: RoomBooking = {
-      ...editing,
-      id: editing.id || `BK-${String(Date.now()).slice(-6)}`,
-      createdAt: editing.createdAt || now,
-      updatedAt: now
-    };
-
     setError("");
-    upsertClientRecord(bookingStorageKey, booking);
-    setBookings((current) => [booking, ...current.filter((item) => item.id !== booking.id)]);
-    setEditing(null);
 
     try {
-      await fetch("/api/bookings", {
+      const response = await fetch("/api/bookings", {
         method: editing.id ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(booking)
+        body: JSON.stringify(editing)
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Booking could not be saved.");
+
+      const booking = result.booking as RoomBooking;
+      setBookings((current) => [booking, ...current.filter((item) => item.id !== booking.id)]);
+      setEditing(null);
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Booking could not be saved.");
     }
   }
 
   async function deleteBooking(id: string) {
-    removeClientRecord<RoomBooking>(bookingStorageKey, id);
-    setBookings((current) => current.filter((booking) => booking.id !== id));
-
     try {
-      await fetch("/api/bookings", {
+      const response = await fetch("/api/bookings", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+      if (!response.ok) throw new Error("Booking could not be deleted.");
+      setBookings((current) => current.filter((booking) => booking.id !== id));
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Booking could not be deleted.");
     }
   }
 

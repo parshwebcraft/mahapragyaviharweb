@@ -7,11 +7,9 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { mergeClientRecords, removeClientRecord, upsertClientRecord } from "@/lib/client-record-store";
 import type { Employee } from "@/lib/admin-mock-data";
 import { formatINR } from "@/utils/currency";
 
-const employeeStorageKey = "mahapragya-admin-employees";
 const departments: Employee["department"][] = [
   "Reception",
   "Management",
@@ -45,10 +43,10 @@ export function EmployeesPage() {
   async function loadEmployees() {
     try {
       const response = await fetch("/api/employees", { cache: "no-store" });
-      const serverEmployees = response.ok ? await response.json() : [];
-      setEmployees(mergeClientRecords<Employee>(employeeStorageKey, serverEmployees));
+      if (!response.ok) throw new Error("Could not load employees.");
+      setEmployees(await response.json());
     } catch {
-      setEmployees(mergeClientRecords<Employee>(employeeStorageKey, []));
+      setError("Could not load employees.");
     }
   }
 
@@ -60,39 +58,37 @@ export function EmployeesPage() {
     event.preventDefault();
     if (!editing) return;
 
-    const employee: Employee = {
-      ...editing,
-      id: editing.id || `EMP-${String(Date.now()).slice(-6)}`
-    };
-
     setError("");
-    upsertClientRecord(employeeStorageKey, employee);
-    setEmployees((current) => [employee, ...current.filter((item) => item.id !== employee.id)]);
-    setEditing(null);
 
     try {
-      await fetch("/api/employees", {
+      const response = await fetch("/api/employees", {
         method: editing.id ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(employee)
+        body: JSON.stringify(editing)
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Employee could not be saved.");
+
+      const employee = result.employee as Employee;
+      setEmployees((current) => [employee, ...current.filter((item) => item.id !== employee.id)]);
+      setEditing(null);
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Employee could not be saved.");
     }
   }
 
   async function deleteEmployee(id: string) {
-    removeClientRecord<Employee>(employeeStorageKey, id);
-    setEmployees((current) => current.filter((employee) => employee.id !== id));
-
     try {
-      await fetch("/api/employees", {
+      const response = await fetch("/api/employees", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
-    } catch {
-      // Browser storage keeps admin data working on read-only deployments.
+      if (!response.ok) throw new Error("Employee could not be deleted.");
+      setEmployees((current) => current.filter((employee) => employee.id !== id));
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Employee could not be deleted.");
     }
   }
 

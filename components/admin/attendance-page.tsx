@@ -6,13 +6,9 @@ import { Pencil, Trash2 } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { mergeClientRecords } from "@/lib/client-record-store";
 import type { AttendanceRecord, AttendanceStatus, Employee } from "@/lib/admin-mock-data";
 
 const statusOrder: AttendanceStatus[] = ["present", "absent", "leave"];
-const employeeStorageKey = "mahapragya-admin-employees";
-const attendanceStorageKey = "mahapragya-vihar-attendance-records";
-const removedAttendanceKey = "mahapragya-vihar-removed-attendance-employees";
 
 function monthDays() {
   const now = new Date();
@@ -32,13 +28,11 @@ export function AttendancePage() {
   useEffect(() => {
     async function loadEmployees() {
       const response = await fetch("/api/employees", { cache: "no-store" });
-      const serverEmployees = response.ok ? await response.json() : [];
-      const employees = mergeClientRecords<Employee>(employeeStorageKey, serverEmployees);
-      const savedRecords = JSON.parse(localStorage.getItem(attendanceStorageKey) || "[]") as AttendanceRecord[];
-      const removedEmployeeIds = JSON.parse(localStorage.getItem(removedAttendanceKey) || "[]") as string[];
+      const attendanceResponse = await fetch("/api/admin-records?collection=attendance", { cache: "no-store" });
+      const employees = response.ok ? ((await response.json()) as Employee[]) : [];
+      const savedRecords = attendanceResponse.ok ? ((await attendanceResponse.json()) as AttendanceRecord[]) : [];
       setRecords(
         employees
-          .filter((employee) => !removedEmployeeIds.includes(employee.id))
           .map((employee) => {
             const savedRecord = savedRecords.find((record) => record.employeeId === employee.id);
 
@@ -56,7 +50,14 @@ export function AttendancePage() {
   }, [totalDays]);
 
   useEffect(() => {
-    localStorage.setItem(attendanceStorageKey, JSON.stringify(records));
+    if (records.length === 0) return;
+    records.forEach((record) => {
+      fetch("/api/admin-records?collection=attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...record, id: record.employeeId })
+      });
+    });
   }, [records]);
 
   const summary = useMemo(() => {
@@ -93,8 +94,11 @@ export function AttendancePage() {
 
   function removeAttendanceRecord(employeeId: string) {
     setRecords((current) => current.filter((record) => record.employeeId !== employeeId));
-    const removedEmployeeIds = JSON.parse(localStorage.getItem(removedAttendanceKey) || "[]") as string[];
-    localStorage.setItem(removedAttendanceKey, JSON.stringify(Array.from(new Set([...removedEmployeeIds, employeeId]))));
+    fetch("/api/admin-records?collection=attendance", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: employeeId })
+    });
     setEditingRecord(null);
   }
 

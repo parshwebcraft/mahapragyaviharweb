@@ -29,17 +29,29 @@ export function SettingsPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("mahapragya-admin-settings");
-    if (saved) setSettings({ ...defaultSettings, ...JSON.parse(saved) });
+    async function loadSettings() {
+      const response = await fetch("/api/admin-records?collection=settings", { cache: "no-store" });
+      if (!response.ok) return;
+      const records = await response.json();
+      const saved = records.find((record: { id: string }) => record.id === "main");
+      if (saved) setSettings({ ...defaultSettings, ...saved });
+    }
+
+    loadSettings();
   }, []);
 
   function updateSetting(key: keyof typeof defaultSettings, value: string) {
     setSettings((current) => ({ ...current, [key]: value }));
   }
 
-  function saveSettings(label: string) {
-    window.localStorage.setItem("mahapragya-admin-settings", JSON.stringify(settings));
-    setMessage(`${label} saved.`);
+  async function saveSettings(label: string) {
+    const response = await fetch("/api/admin-records?collection=settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: "main", ...settings })
+    });
+
+    setMessage(response.ok ? `${label} saved.` : `${label} could not be saved.`);
   }
 
   return (
