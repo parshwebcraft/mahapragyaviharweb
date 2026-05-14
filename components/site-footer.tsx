@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Sparkles, MessageCircle, Globe } from "lucide-react";
 
 import { footerLinks, contactDetails } from "@/lib/site-content";
@@ -19,9 +20,20 @@ export function SiteFooter() {
 
             {/* Left */}
             <div className="space-y-4">
-              <p className="font-heading text-2xl text-accent">
-                {siteConfig.name}
-              </p>
+              <div className="flex items-center gap-3">
+                <div className="relative h-14 w-14 overflow-hidden rounded-full border border-accent/10 bg-white shadow-sm">
+                  <Image
+                    src="/TS.png"
+                    alt="Mahapragya Vihar logo"
+                    fill
+                    sizes="56px"
+                    className="object-contain p-1"
+                  />
+                </div>
+                <p className="font-heading text-2xl text-accent">
+                  {siteConfig.name}
+                </p>
+              </div>
 
               <p className="max-w-md text-sm leading-7 text-muted-foreground">
                 50 fully air-conditioned rooms in Bhuwana, Udaipur. Ideal for wedding guests, family stay and group bookings.
