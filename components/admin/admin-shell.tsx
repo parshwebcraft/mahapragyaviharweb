@@ -25,7 +25,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: Home },
   { href: "/admin/rooms", label: "Room Management", icon: BedDouble },
   { href: "/admin/bookings", label: "Bookings", icon: ClipboardList },
-  { href: "/admin/wedding-inquiries", label: "Wedding Inquiries", icon: CalendarCheck },
+  { href: "/admin/wedding-inquiries", label: "Wedding Bookings", icon: CalendarCheck },
   { href: "/admin/employees", label: "Employees", icon: Users },
   { href: "/admin/attendance", label: "Attendance", icon: UserRoundCog },
   { href: "/admin/salary", label: "Salary Management", icon: WalletCards },

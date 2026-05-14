@@ -52,7 +52,17 @@ export interface Employee {
   id: string;
   name: string;
   role: string;
-  department: "Reception" | "Management" | "Cleaning" | "Kitchen" | "Event Support" | "IT";
+  department:
+    | "Reception"
+    | "Management"
+    | "Cleaning"
+    | "Kitchen"
+    | "Event Support"
+    | "IT"
+    | "Cashier"
+    | "Treasurer"
+    | "President"
+    | "General Secretary";
   phone: string;
   joiningDate: string;
   salary: number;

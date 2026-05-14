@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@parshwebcraft.in");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("Use the admin credentials to access the panel.");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -48,12 +48,22 @@ export default function AdminLoginPage() {
         <h1 className="font-heading text-5xl text-accent">Sign in to the admin panel.</h1>
         <p className="text-sm leading-7 text-muted-foreground">{message}</p>
         <div className="space-y-4">
-          <Input value={email} onChange={(event) => setEmail(event.target.value)} type="email" />
+          <Input
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            type="email"
+            placeholder="Admin email"
+            autoComplete="off"
+            name="mahapragya-admin-email"
+          />
           <div className="relative">
             <Input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               type={showPassword ? "text" : "password"}
+              placeholder="Admin password"
+              autoComplete="new-password"
+              name="mahapragya-admin-password"
               className="pr-12"
             />
             <button

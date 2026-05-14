@@ -6,7 +6,7 @@ export default function AdminWeddingInquiriesPage() {
   requireAdmin();
 
   return (
-    <AdminShell title="Wedding Inquiries" subtitle="Track family inquiries, function dates, room needs and priority follow-ups.">
+    <AdminShell title="Wedding Bookings" subtitle="Track booked wedding functions, dates, rooms, venues and contact follow-ups.">
       <WeddingInquiriesPage />
     </AdminShell>
   );

@@ -22,7 +22,7 @@ const emptyInquiry: WeddingInquiry = {
   guestCount: 1,
   roomsRequired: 0,
   notes: "",
-  status: "new",
+  status: "booking_done",
   priority: "medium"
 };
 
@@ -77,10 +77,10 @@ export function WeddingInquiriesPage() {
 
     try {
       const response = await fetch("/api/wedding-inquiries", { cache: "no-store" });
-      if (!response.ok) throw new Error("Could not load wedding inquiries.");
+      if (!response.ok) throw new Error("Could not load wedding bookings.");
       setInquiries(await response.json());
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "Could not load wedding inquiries.");
+      setError(loadError instanceof Error ? loadError.message : "Could not load wedding bookings.");
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ export function WeddingInquiriesPage() {
 
     const result = await response.json();
     if (!response.ok) {
-      setError(result.error || "Wedding inquiry could not be saved.");
+      setError(result.error || "Wedding booking could not be saved.");
       return;
     }
 
@@ -131,7 +131,7 @@ export function WeddingInquiriesPage() {
         </Button>
         <Button onClick={() => setEditing({ ...emptyInquiry })}>
           <Plus className="mr-2 h-4 w-4" />
-          Create inquiry
+          Add wedding booking
         </Button>
       </div>
 
@@ -140,7 +140,7 @@ export function WeddingInquiriesPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         {!loading && inquiries.length === 0 && (
           <Card className="p-6 text-sm text-muted-foreground lg:col-span-2">
-            No wedding inquiries yet. Click Create inquiry to add family/function details.
+            No wedding bookings yet. Click Add wedding booking to enter booked family/function details.
           </Card>
         )}
 
@@ -212,7 +212,7 @@ export function WeddingInquiriesPage() {
       {editing && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-accent/20 p-4">
           <Card className="w-full max-w-3xl bg-white p-6">
-            <h2 className="text-2xl font-heading text-accent">{editing.id ? "Edit wedding inquiry" : "Create wedding inquiry"}</h2>
+            <h2 className="text-2xl font-heading text-accent">{editing.id ? "Edit wedding booking" : "Add wedding booking"}</h2>
             <form onSubmit={saveInquiry} className="mt-5 grid gap-4 md:grid-cols-2">
               <Input value={editing.familyName} onChange={(event) => setEditing({ ...editing, familyName: event.target.value })} placeholder="Family name" required />
               <Input value={editing.phone} onChange={(event) => setEditing({ ...editing, phone: event.target.value })} placeholder="Primary WhatsApp number" required />
@@ -240,10 +240,10 @@ export function WeddingInquiriesPage() {
                 ))}
               </select>
               <select value={editing.status} onChange={(event) => setEditing({ ...editing, status: event.target.value as InquiryStatus })} className="h-11 rounded-2xl border border-border bg-white/80 px-4 text-sm">
+                <option value="booking_done">Booking Done</option>
                 <option value="new">New</option>
                 <option value="contacted">Contacted</option>
                 <option value="site_visit">Site Visit</option>
-                <option value="booking_done">Booking Done</option>
                 <option value="closed">Closed</option>
               </select>
               <select value={editing.priority} onChange={(event) => setEditing({ ...editing, priority: event.target.value as Priority })} className="h-11 rounded-2xl border border-border bg-white/80 px-4 text-sm md:col-span-2">
@@ -266,7 +266,7 @@ export function WeddingInquiriesPage() {
                 className="rounded-2xl border border-border bg-white/80 px-4 py-3 text-sm md:col-span-2"
               />
               <div className="flex gap-3 md:col-span-2">
-                <Button type="submit" className="flex-1">Save inquiry</Button>
+                <Button type="submit" className="flex-1">Save booking</Button>
                 <Button type="button" variant="outline" className="flex-1" onClick={() => setEditing(null)}>Cancel</Button>
               </div>
             </form>

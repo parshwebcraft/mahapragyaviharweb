@@ -42,7 +42,7 @@ const venues = [
   },
   {
     title: "AC Rooms",
-    image: "/rooms/room1.jpg",
+    image: "/room3.jpg",
     capacity: "Family stay & wedding guest accommodation",
     icon: BedDouble,
     details: [

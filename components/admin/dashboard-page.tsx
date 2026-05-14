@@ -51,9 +51,7 @@ export function DashboardPage({
   const activeWeddingInquiries = savedWeddingInquiries.length > 0 ? savedWeddingInquiries : weddingInquiries;
   const occupiedRooms = adminRooms.filter((room) => room.status === "occupied").length;
   const availableRooms = adminRooms.filter((room) => room.status === "available").length;
-  const pendingInquiries = activeWeddingInquiries.filter(
-    (inquiry) => !["booking_done", "closed"].includes(inquiry.status)
-  ).length;
+  const weddingBookingsCount = activeWeddingInquiries.length;
   const occupancy = Math.round((occupiedRooms / adminRooms.length) * 100);
   const currentMonth = new Date().toISOString().slice(0, 7);
   const monthlyBookings = savedBookings.filter((booking) => booking.checkIn.startsWith(currentMonth)).length;
@@ -66,7 +64,7 @@ export function DashboardPage({
         <StatCard label="Available Rooms" value={availableRooms} icon={BedDouble} />
         <StatCard label="Total Employees" value={savedEmployees.length || employees.length} icon={Users} />
         <StatCard label="Monthly Bookings" value={monthlyBookings} icon={CalendarDays} />
-        <StatCard label="Pending Inquiries" value={pendingInquiries} icon={ClipboardCheck} />
+        <StatCard label="Wedding Bookings" value={weddingBookingsCount} icon={ClipboardCheck} />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
@@ -132,7 +130,7 @@ export function DashboardPage({
           <div className="mt-6 grid gap-3">
             {activeWeddingInquiries.length === 0 && (
               <div className="rounded-2xl border bg-white/70 p-4 text-sm text-muted-foreground">
-                No wedding inquiries yet.
+                No wedding bookings yet.
               </div>
             )}
 

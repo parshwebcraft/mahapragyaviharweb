@@ -10,7 +10,18 @@ import { Input } from "@/components/ui/input";
 import type { Employee } from "@/lib/admin-mock-data";
 import { formatINR } from "@/utils/currency";
 
-const departments: Employee["department"][] = ["Reception", "Management", "Cleaning", "Kitchen", "Event Support", "IT"];
+const departments: Employee["department"][] = [
+  "Reception",
+  "Management",
+  "Cleaning",
+  "Kitchen",
+  "Event Support",
+  "IT",
+  "Cashier",
+  "Treasurer",
+  "President",
+  "General Secretary"
+];
 
 const emptyEmployee: Employee = {
   id: "",
@@ -75,7 +86,7 @@ export function EmployeesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Button onClick={() => setEditing(emptyEmployee)}>
+        <Button onClick={() => setEditing({ ...emptyEmployee })}>
           <Plus className="mr-2 h-4 w-4" />
           Add employee
         </Button>
@@ -132,19 +143,47 @@ export function EmployeesPage() {
           <Card className="w-full max-w-2xl bg-white p-6">
             <h2 className="text-2xl font-heading text-accent">{editing.id ? "Edit employee" : "Add employee"}</h2>
             <form onSubmit={saveEmployee} className="mt-5 grid gap-4 md:grid-cols-2">
-              <Input value={editing.name} onChange={(event) => setEditing({ ...editing, name: event.target.value })} placeholder="Employee name" required />
-              <Input value={editing.role} onChange={(event) => setEditing({ ...editing, role: event.target.value })} placeholder="Role" required />
-              <select value={editing.department} onChange={(event) => setEditing({ ...editing, department: event.target.value as Employee["department"] })} className="h-11 rounded-2xl border border-border bg-white/80 px-4 text-sm">
-                {departments.map((department) => <option key={department}>{department}</option>)}
-              </select>
-              <Input value={editing.phone} onChange={(event) => setEditing({ ...editing, phone: event.target.value })} placeholder="Phone" required />
-              <Input type="date" value={editing.joiningDate} onChange={(event) => setEditing({ ...editing, joiningDate: event.target.value })} required />
-              <Input type="number" value={editing.salary} onChange={(event) => setEditing({ ...editing, salary: Number(event.target.value) })} placeholder="Salary" required />
-              <select value={editing.status} onChange={(event) => setEditing({ ...editing, status: event.target.value as Employee["status"] })} className="h-11 rounded-2xl border border-border bg-white/80 px-4 text-sm md:col-span-2">
-                <option value="active">Active</option>
-                <option value="on_leave">On Leave</option>
-                <option value="inactive">Inactive</option>
-              </select>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70">
+                Employee Name
+                <Input value={editing.name} onChange={(event) => setEditing({ ...editing, name: event.target.value })} placeholder="Employee name" required />
+              </label>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70">
+                Role / Post
+                <Input value={editing.role} onChange={(event) => setEditing({ ...editing, role: event.target.value })} placeholder="Cashier, Treasurer, President, Manager..." required />
+              </label>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70">
+                Department / Committee
+                <select value={editing.department} onChange={(event) => setEditing({ ...editing, department: event.target.value as Employee["department"] })} className="h-11 rounded-2xl border border-border bg-white/80 px-4 text-sm normal-case tracking-normal text-foreground">
+                  {departments.map((department) => <option key={department}>{department}</option>)}
+                </select>
+              </label>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70">
+                Phone
+                <Input value={editing.phone} onChange={(event) => setEditing({ ...editing, phone: event.target.value })} placeholder="Phone number" required />
+              </label>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70">
+                Joining Date
+                <Input type="date" value={editing.joiningDate} onChange={(event) => setEditing({ ...editing, joiningDate: event.target.value })} required />
+              </label>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70">
+                Monthly Salary
+                <Input
+                  type="number"
+                  min={0}
+                  value={editing.salary > 0 ? editing.salary : ""}
+                  onChange={(event) => setEditing({ ...editing, salary: Number(event.target.value) })}
+                  placeholder="Monthly salary amount"
+                  required
+                />
+              </label>
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent/70 md:col-span-2">
+                Status
+                <select value={editing.status} onChange={(event) => setEditing({ ...editing, status: event.target.value as Employee["status"] })} className="h-11 rounded-2xl border border-border bg-white/80 px-4 text-sm normal-case tracking-normal text-foreground">
+                  <option value="active">Active</option>
+                  <option value="on_leave">On Leave</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </label>
               <div className="flex gap-3 md:col-span-2">
                 <Button type="submit" className="flex-1">Save employee</Button>
                 <Button type="button" variant="outline" className="flex-1" onClick={() => setEditing(null)}>Cancel</Button>

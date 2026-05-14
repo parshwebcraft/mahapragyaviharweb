@@ -16,7 +16,7 @@ export default async function AdminPage() {
   return (
     <AdminShell
       title="Dashboard"
-      subtitle="Live hospitality overview for rooms, bookings, inquiries and team operations."
+        subtitle="Live hospitality overview for rooms, wedding bookings and team operations."
     >
       <DashboardPage
         savedBookings={savedBookings}

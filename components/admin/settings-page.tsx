@@ -49,13 +49,13 @@ export function SettingsPage() {
       </Card>
 
       <Card className="p-5 xl:col-span-2">
-        <h2 className="text-2xl font-heading text-accent">Wedding inquiry settings</h2>
+        <h2 className="text-2xl font-heading text-accent">Wedding booking settings</h2>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <Input defaultValue="High priority above 300 guests" />
           <Input defaultValue="Auto-follow-up after 24 hours" />
           <Input defaultValue="Require rooms estimate" />
         </div>
-        <Button className="mt-4"><Save className="mr-2 h-4 w-4" />Save inquiry settings</Button>
+        <Button className="mt-4"><Save className="mr-2 h-4 w-4" />Save booking settings</Button>
       </Card>
     </div>
   );

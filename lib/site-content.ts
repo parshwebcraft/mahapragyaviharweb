@@ -34,8 +34,8 @@ export const galleryImages = [
   "/WhatsApp Image 2026-05-10 at 11.18.10.jpeg",
   "/room-1.jpg",
   "/room-2.JPG",
-  "/room-3.jpg",
-  "room-7.jpg"
+  "/room3.jpg",
+  "/room4.jpg"
 ];
 
 export const contactDetails = {
