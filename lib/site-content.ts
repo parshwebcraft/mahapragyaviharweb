@@ -38,12 +38,18 @@ export const galleryImages = [
   "/room4.jpg"
 ];
 
+const supabaseStorageUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/business-assets/mahapragya-vihar/gallery`
+  : "";
+
+function galleryVideoUrl(fileName: string) {
+  return supabaseStorageUrl ? `${supabaseStorageUrl}/${fileName}` : `/${fileName}`;
+}
+
 export const galleryVideos = [
-  "/IMG_1013.MOV",
-  "/IMG_1026.MOV",
-  "/IMG_1027.MOV",
-  "/IMG_1028.MOV",
-  "/IMG_1038.MOV"
+  galleryVideoUrl("IMG_1013.MOV"),
+  galleryVideoUrl("IMG_1026.MOV"),
+  galleryVideoUrl("IMG_1038.MOV")
 ];
 
 export const contactDetails = {
