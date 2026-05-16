@@ -50,7 +50,7 @@ export function GalleryVideoCard({ src, title }: { src: string; title: string })
 
   return (
     <div className="group overflow-hidden rounded-[32px] bg-white shadow-soft">
-      <div className="relative h-[430px] bg-black md:h-[560px]">
+      <div className="relative aspect-[9/16] bg-black">
         <video
           ref={videoRef}
           src={src}

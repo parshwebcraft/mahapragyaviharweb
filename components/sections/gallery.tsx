@@ -30,7 +30,7 @@ export function GallerySection() {
           </div>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {galleryVideos.map((video, index) => (
             <GalleryVideoCard
               key={video}
