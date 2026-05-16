@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { galleryImages } from "@/lib/site-content";
+import { galleryImages, galleryVideos } from "@/lib/site-content";
+import { GalleryVideoCard } from "@/components/sections/gallery-video-card";
 
 export function GallerySection() {
   return (
@@ -16,9 +17,33 @@ export function GallerySection() {
         </h2>
 
         <p className="mt-4 max-w-2xl text-muted-foreground">
-          Explore real photos of Luxury AC Rooms rooms, wedding setups, garden
-          area and event halls at Mahapragya Vihar, Bhuwana Udaipur.
+          Explore real photos and videos of Luxury AC Rooms, wedding setups,
+          garden area and event halls at Mahapragya Vihar, Bhuwana Udaipur.
         </p>
+      </div>
+
+      <div className="mb-12">
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm uppercase tracking-[0.26em] text-accent/70">Venue Videos</p>
+            <h3 className="mt-2 font-heading text-3xl text-accent">Walkthrough and real venue clips</h3>
+          </div>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          {galleryVideos.map((video, index) => (
+            <GalleryVideoCard
+              key={video}
+              src={video}
+              title={`Mahapragya Vihar video ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-5">
+        <p className="text-sm uppercase tracking-[0.26em] text-accent/70">Photo Gallery</p>
+        <h3 className="mt-2 font-heading text-3xl text-accent">Rooms and campus photos</h3>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
