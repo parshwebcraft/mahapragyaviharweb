@@ -52,6 +52,50 @@ export const galleryVideos = [
   galleryVideoUrl("IMG_1038.MOV")
 ];
 
+export type GalleryEmbeddedVideo = {
+  title: string;
+  sourceLabel: string;
+  url: string;
+};
+
+export const galleryEmbeddedVideos: GalleryEmbeddedVideo[] = [
+  {
+    title: "Mahapragya Vihar YouTube Reel",
+    sourceLabel: "YouTube Reel",
+    url: "https://youtu.be/OH-llMTsisA"
+  }
+];
+
+export function getEmbeddedVideoUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace(/^www\./, "");
+
+    if (hostname === "youtu.be") {
+      const videoId = parsed.pathname.split("/").filter(Boolean)[0];
+      return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : url;
+    }
+
+    if (hostname === "youtube.com" || hostname === "m.youtube.com") {
+      const videoId =
+        parsed.searchParams.get("v") ||
+        parsed.pathname.match(/\/(?:shorts|embed)\/([^/?]+)/)?.[1];
+      return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : url;
+    }
+
+    if (hostname === "drive.google.com") {
+      const fileId =
+        parsed.pathname.match(/\/file\/d\/([^/]+)/)?.[1] ||
+        parsed.searchParams.get("id");
+      return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : url;
+    }
+
+    return url;
+  } catch {
+    return url;
+  }
+}
+
 export const contactDetails = {
   address: "Mahapragya Vihar, Bhuwana, Udaipur, Rajasthan, India",
   phone: "+91 77339 92007", 

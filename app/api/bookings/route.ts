@@ -19,12 +19,18 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!isAdminRequest()) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
-    const booking = await createBooking(await request.json());
+    const body = await request.json();
+    const booking = await createBooking(
+      isAdminRequest()
+        ? body
+        : {
+            ...body,
+            roomAssigned: "Pending",
+            status: "pending"
+          }
+    );
+
     return NextResponse.json({ booking }, { status: 201 });
   } catch (error) {
     return NextResponse.json(

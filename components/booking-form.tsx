@@ -25,6 +25,8 @@ export function BookingForm() {
   const [roomType, setRoomType] = useState(roomTypes[0]);
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const whatsappMessage = useMemo(
     () => `Hello, I want to book rooms at Mahapragya Vihar Udaipur.
@@ -41,13 +43,42 @@ Notes: ${notes || "None"}`,
   async function submitBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setSuccess("");
 
     if (!guestName || !phone || !checkIn || !checkOut) {
       setError("Please fill guest name, phone, check-in and check-out.");
       return;
     }
 
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`, "_blank");
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          guestName,
+          phone,
+          checkIn,
+          checkOut,
+          roomCount,
+          roomType,
+          notes
+        })
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Booking request could not be saved.");
+      }
+
+      setSuccess("Booking request saved in admin panel as pending.");
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`, "_blank");
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Booking request could not be saved.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -122,10 +153,11 @@ Notes: ${notes || "None"}`,
         </label>
 
         {error && <p className="text-sm font-medium text-red-600 md:col-span-2">{error}</p>}
+        {success && <p className="text-sm font-medium text-green-700 md:col-span-2">{success}</p>}
 
-        <Button type="submit" size="lg" className="md:col-span-2">
+        <Button type="submit" size="lg" className="md:col-span-2" disabled={submitting}>
           <MessageCircle className="mr-2 h-4 w-4" />
-          Send WhatsApp Inquiry
+          {submitting ? "Saving Request..." : "Send WhatsApp Inquiry"}
         </Button>
       </form>
     </Card>

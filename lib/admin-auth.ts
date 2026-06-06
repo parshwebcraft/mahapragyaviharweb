@@ -4,10 +4,21 @@ const SESSION_COOKIE = "mv_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
 
 function getSecret() {
+  if (process.env.NODE_ENV === "production" && !process.env.ADMIN_SESSION_SECRET) {
+    throw new Error("ADMIN_SESSION_SECRET is required in production.");
+  }
+
   return process.env.ADMIN_SESSION_SECRET || "change-this-to-a-long-random-string";
 }
 
 export function getAdminCredentials() {
+  if (
+    process.env.NODE_ENV === "production" &&
+    (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD)
+  ) {
+    throw new Error("ADMIN_EMAIL and ADMIN_PASSWORD are required in production.");
+  }
+
   return {
     email: process.env.ADMIN_EMAIL || "admin@parshwebcraft.in",
     password: process.env.ADMIN_PASSWORD || "admin123"

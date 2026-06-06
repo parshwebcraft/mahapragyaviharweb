@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { galleryImages, galleryVideos } from "@/lib/site-content";
+import {
+  galleryEmbeddedVideos,
+  galleryImages,
+  galleryVideos,
+  getEmbeddedVideoUrl
+} from "@/lib/site-content";
 import { GalleryVideoCard } from "@/components/sections/gallery-video-card";
 
 export function GallerySection() {
@@ -29,6 +34,32 @@ export function GallerySection() {
             <h3 className="mt-2 font-heading text-3xl text-accent">Walkthrough and real venue clips</h3>
           </div>
         </div>
+
+        {galleryEmbeddedVideos.length > 0 && (
+          <div className="mb-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {galleryEmbeddedVideos.map((video) => (
+              <div key={video.url} className="overflow-hidden rounded-[32px] bg-white shadow-soft">
+                <div className="aspect-[9/16] bg-black">
+                  <iframe
+                    src={getEmbeddedVideoUrl(video.url)}
+                    title={video.title}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent/70">
+                    {video.sourceLabel}
+                  </p>
+                  <h4 className="mt-2 font-heading text-2xl text-accent">{video.title}</h4>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {galleryVideos.map((video, index) => (
