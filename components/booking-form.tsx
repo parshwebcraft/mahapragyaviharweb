@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-const WHATSAPP_NUMBER = "919829074922";
+const WHATSAPP_NUMBER = "919414165894";
 
 const roomTypes = [
   "Luxury AC Room",

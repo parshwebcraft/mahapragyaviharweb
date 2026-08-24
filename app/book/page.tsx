@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { BookingForm } from "@/components/booking-form";
 
 export default function BookPage() {
-  const WHATSAPP = "919829074922";
+  const WHATSAPP = "919414165894";
 
   const openWhatsApp = (message: string) => {
     return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;

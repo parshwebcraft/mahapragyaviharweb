@@ -11,7 +11,7 @@ const defaultSettings = {
   address: "Mahapragya Vihar, Bhuwana, Udaipur",
   phone: "+91 77339 92007",
   email: "mahapragyavihar@gmail.com",
-  whatsappPrimary: "919829074922",
+  whatsappPrimary: "919414165894",
   whatsappSecondary: "917733992007",
   whatsappTeam: "919521347419",
   adminEmail: "admin@parshwebcraft.in",

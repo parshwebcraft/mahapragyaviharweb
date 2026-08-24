@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function EventsPage() {
-  const WHATSAPP = "919829074922";
+  const WHATSAPP = "919414165894";
 
   const wa = (msg: string) =>
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;

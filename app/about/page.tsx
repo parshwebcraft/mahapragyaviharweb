@@ -13,13 +13,13 @@ import { contactDetails } from "@/lib/site-content";
 const teamMembers = [
   {
     role: "Adhyaksha",
-    name: "Kamal Ji Nahata",
+    name: "Rajkumar Ji Kachchara",
     icon: Users,
     image: ""
   },
   {
     role: "MahaMantri",
-    name: "Abhishek Ji Pokharna",
+    name: "Rakesh Ji Nahar",
     icon: ShieldCheck,
     image: ""
   },

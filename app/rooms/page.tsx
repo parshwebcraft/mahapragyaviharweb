@@ -56,7 +56,7 @@ const venues = [
 const nearbyPlaces = ["Fateh Sagar Lake", "City Palace", "Saheliyon Ki Bari"];
 
 export default function VenuePage() {
-  const whatsapp = "919829074922";
+  const whatsapp = "919414165894";
 
   function openWhatsApp(title: string) {
     const message = `Hello, I want details for ${title} booking at Mahapragya Vihar, Bhuwana Udaipur. Please share availability and charges.`;

@@ -53,7 +53,7 @@ export function HeroSection() {
               </Button>
             </Link>
             <a
-              href={`https://wa.me/919829074922?text=${encodeURIComponent(whatsappMessage)}`}
+              href={`https://wa.me/919414165894?text=${encodeURIComponent(whatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
             >

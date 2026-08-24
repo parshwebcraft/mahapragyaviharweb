@@ -7,16 +7,16 @@ import { Button } from "@/components/ui/button";
 const team = [
   {
     role: "President",
-    name: "Kamal Ji Nahata",
-    phone: "917733992007",
+    name: "Rajkumar Ji Kachchara",
+    phone: "919414658994",
   },
   {
     role: "General Seceratory",
-    name: "Abhishek Ji Pokharna",
-    phone: "919829074922",
+    name: "Rakesh Ji Nahar",
+    phone: "919414165894",
   },
   {
-    role: "IT Team Lead",
+    role: "IT Team Support",
     name: "Gauransh Jaroli",
     phone: "919521347419",
   },
@@ -26,7 +26,7 @@ export default function ContactPage() {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
 
-  const WATSAPP_NUMBER = "919829074922";
+  const WATSAPP_NUMBER = "919414165894";
 
   // Wedding Inquiry
   const handleWedding = () => {
